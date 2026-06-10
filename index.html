@@ -28,12 +28,14 @@ async function isub(){
 }
 async function _mcSub(email){
   try{
-    await fetch('https://us12.api.mailchimp.com/3.0/lists/2874eb99a0/members',{
+    const resp = await fetch('https://elitebonushub-mailchimp.ebh-betinfo.workers.dev',{
       method:'POST',
-      headers:{'Content-Type':'application/json','Authorization':'Basic '+btoa('user:[KEY_IN_ENV_VAR]')},
-      body:JSON.stringify({email_address:email,status:'subscribed',tags:['elitebonushub'],merge_fields:{SOURCE:'EBH Website'}})
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({email:email,source:'EBH Website'})
     });
-  }catch(e){console.log('MC:',e.message);}
+    const data = await resp.json();
+    console.log('EBH subscribe:',data.success?'OK':data.error||'sent');
+  }catch(e){console.log('EBH subscribe error:',e.message);}
 }
 // Fire popup as soon as DOM is ready
 document.addEventListener('DOMContentLoaded',function(){
