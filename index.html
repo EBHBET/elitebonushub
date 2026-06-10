@@ -210,6 +210,66 @@ a:hover{text-decoration:underline}
   .footer-brand{grid-column:1/-1}
 }
 </style>
+
+<!-- Google Analytics 4 — replace G-XXXXXXXXXX with your real Measurement ID -->
+<!-- Get yours free at analytics.google.com → Admin → Create Property -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-PS0DM4D48M"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-PS0DM4D48M', {
+    page_title: document.title,
+    page_location: window.location.href,
+    // Track country/city demographics automatically
+    // Track device type, browser, OS automatically
+    // Custom dimensions for affiliate tracking
+  });
+
+  // Track affiliate link clicks as GA4 events
+  document.addEventListener('click', function(e) {
+    var link = e.target.closest('a[rel*="sponsored"]');
+    if (!link) return;
+    var url = link.href || '';
+    var casino = url.includes('stake.com') ? 'Stake'
+               : url.includes('bc.game')   ? 'BCGame'
+               : url.includes('cldbt')     ? 'Cloudbet'
+               : url.includes('rollbit')   ? 'Rollbit'
+               : 'Unknown';
+    gtag('event', 'affiliate_click', {
+      event_category: 'Affiliate',
+      event_label: casino,
+      casino_name: casino,
+      destination_url: url,
+      value: 1
+    });
+  });
+
+  // Track email popup shown
+  var _origShow = window.showPopup;
+  window.showPopup = function() {
+    gtag('event', 'popup_shown', { event_category: 'Email Capture' });
+    if (_origShow) _origShow();
+  };
+
+  // Track email signups
+  var _origSub = window.sub;
+  window.sub = async function() {
+    gtag('event', 'email_signup', {
+      event_category: 'Email Capture',
+      event_label: 'Popup form'
+    });
+    if (_origSub) return _origSub();
+  };
+  var _origIsub = window.isub;
+  window.isub = async function() {
+    gtag('event', 'email_signup', {
+      event_category: 'Email Capture',
+      event_label: 'Inline form'
+    });
+    if (_origIsub) return _origIsub();
+  };
+</script>
 </head>
 <body>
 
