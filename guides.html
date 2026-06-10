@@ -262,47 +262,98 @@ function filter(cat) {
   renderGrid();
 }
 
+function filter(cat) {
+  currentFilter = cat;
+  document.querySelectorAll('.cat-btn').forEach(function(b){ b.classList.remove('active'); });
+  var btn = document.getElementById('cat-'+cat);
+  if(btn) btn.classList.add('active');
+  renderGrid();
+}
+
+function updateCounts() {
+  var cats = {all:0, reviews:0, guides:0, bonuses:0, highroller:0};
+  ARTICLES.forEach(function(a){
+    if(liveSet[a.slug]){
+      cats.all++;
+      if(cats[a.cat] !== undefined) cats[a.cat]++;
+    }
+  });
+  Object.keys(cats).forEach(function(k){
+    var el = document.getElementById('cnt-'+k);
+    if(el) el.textContent = cats[k];
+  });
+  document.getElementById('s-live').textContent = cats.all;
+  document.getElementById('s-coming').textContent = ARTICLES.length - cats.all;
+  document.getElementById('stats-bar').style.display = 'flex';
+}
+
 function renderGrid() {
   document.getElementById('loading').style.display = 'none';
   var grid = document.getElementById('grid');
   grid.style.display = 'grid';
 
-  var filtered = ARTICLES.filter(function(a){
-    return currentFilter === 'all' || a.cat === currentFilter;
+  // ONLY show articles confirmed live — never show deleted/coming-soon as links
+  var liveArticles = ARTICLES.filter(function(a){
+    return liveSet[a.slug] &&
+           (currentFilter === 'all' || a.cat === currentFilter);
   });
 
-  // Sort: live articles first, then coming soon
-  filtered.sort(function(a,b){
-    var aLive = !!liveSet[a.slug] ? 0 : 1;
-    var bLive = !!liveSet[b.slug] ? 0 : 1;
-    return aLive - bLive;
-  });
-
-  grid.innerHTML = filtered.map(function(a){
-    var live = !!liveSet[a.slug];
-    var liveHtml = live ? '<span class="live-badge">Live</span>' : '';
-    if(live) {
-      return '<a href="'+a.slug+'.html" class="article-card">'+
-        '<div class="card-top"><span class="card-tag" style="background:'+a.tagBg+';color:'+a.tagColor+'">'+a.tag+'</span>'+liveHtml+'</div>'+
-        '<div class="card-casino">'+a.casino+'</div>'+
-        '<div class="card-title">'+a.title+'</div>'+
-        '<p class="card-desc">'+a.desc+'</p>'+
-        '<div class="card-footer"><span class="card-read">'+a.time+' read</span><span class="card-arrow">Read &rarr;</span></div>'+
-      '</a>';
-    } else {
-      return '<div class="article-card coming">'+
-        '<div class="card-top"><span class="card-tag" style="background:'+a.tagBg+';color:'+a.tagColor+'">'+a.tag+'</span></div>'+
-        '<div class="card-casino">'+a.casino+'</div>'+
-        '<div class="card-title">'+a.title+'</div>'+
-        '<p class="card-desc">'+a.desc+'</p>'+
-        '<div class="card-footer"><span class="card-read">Coming soon</span><span class="card-arrow soon">Soon &rarr;</span></div>'+
+  if(!liveArticles.length) {
+    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:3rem;color:var(--muted);font-size:14px">' +
+      (Object.keys(liveSet).length === 0
+        ? 'Loading articles...'
+        : 'No articles in this category yet — check back soon.') +
       '</div>';
-    }
-  }).join('');
-
-  if(!filtered.length) {
-    grid.innerHTML = '<div class="empty">No articles in this category yet.</div>';
+    return;
   }
+
+  grid.innerHTML = liveArticles.map(function(a){
+    return '<a href="' + a.slug + '.html" class="article-card">' +
+      '<div class="card-top">' +
+        '<span class="card-tag" style="background:' + a.tagBg + ';color:' + a.tagColor + '">' + a.tag + '</span>' +
+        '<span class="live-badge">Live</span>' +
+      '</div>' +
+      '<div class="card-casino">' + a.casino + '</div>' +
+      '<div class="card-title">' + a.title + '</div>' +
+      '<p class="card-desc">' + a.desc + '</p>' +
+      '<div class="card-footer">' +
+        '<span class="card-read">' + a.time + ' read</span>' +
+        '<span class="card-arrow">Read &rarr;</span>' +
+      '</div>' +
+    '</a>';
+  }).join('');
+}
+
+function checkLive() {
+  // Always fetch fresh — no cache
+  fetch('https://api.github.com/repos/EBHBET/elitebonushub/contents/?t=' + Date.now(), {
+    headers: {'Cache-Control': 'no-cache', 'Pragma': 'no-cache'}
+  })
+  .then(function(r){ return r.json(); })
+  .then(function(files){
+    liveSet = {}; // Reset completely on every check
+    if(!Array.isArray(files)) {
+      renderGrid();
+      return;
+    }
+    var names = files.map(function(f){ return f.name; });
+    ARTICLES.forEach(function(a){
+      if(names.indexOf(a.slug + '.html') !== -1) {
+        liveSet[a.slug] = true;
+      }
+    });
+    // cloudbet-whale-mode is always live (confirmed in repo)
+    liveSet['cloudbet-whale-mode'] = true;
+    updateCounts();
+    renderGrid();
+  })
+  .catch(function(err){
+    console.log('GitHub API error:', err);
+    // On error show only cloudbet-whale-mode which we know exists
+    liveSet = {'cloudbet-whale-mode': true};
+    updateCounts();
+    renderGrid();
+  });
 }
 
 checkLive();
