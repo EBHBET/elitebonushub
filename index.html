@@ -211,6 +211,11 @@ a:hover{text-decoration:underline}
 /* Stake brand card */
 .stake-card-header{background:#0F212E;border-radius:10px 10px 0 0;padding:.75rem 1rem;display:flex;align-items:center;justify-content:center}
 .stake-card-header img{height:28px;width:auto;object-fit:contain}
+
+details[open] summary span{transform:rotate(45deg)}
+details summary{user-select:none}
+details summary::-webkit-details-marker{display:none}
+details[open]{border-color:rgba(212,160,23,.35)}
 @media(max-width:700px){
   .nav-links{display:none}
   .hero{padding:3rem 1rem 2.5rem}
@@ -285,6 +290,15 @@ a:hover{text-decoration:underline}
   "@context": "https://schema.org",
   "@graph": [
     {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {"@type":"Question","name":"What is a crypto casino bonus?","acceptedAnswer":{"@type":"Answer","text":"A crypto casino bonus is a promotional offer — typically a percentage match on your first deposit. For example Stake offers 200% up to 1 BTC."}},
+        {"@type":"Question","name":"What does No KYC mean at a crypto casino?","acceptedAnswer":{"@type":"Answer","text":"No KYC means you can deposit, play, and withdraw without submitting identity documents. Most crypto casinos including Stake and BC.Game are no KYC."}},
+        {"@type":"Question","name":"What is provably fair gambling?","acceptedAnswer":{"@type":"Answer","text":"Provably fair is a cryptographic system that lets you independently verify every game result was genuinely random and not manipulated by the casino."}},
+        {"@type":"Question","name":"How fast are crypto casino withdrawals?","acceptedAnswer":{"@type":"Answer","text":"Crypto withdrawals process in minutes, often under 60 seconds. Stake and BC.Game are among the fastest."}}
+      ]
+    },
+    {
       "@type": "WebSite",
       "name": "EliteBonusHub",
       "url": "https://elitebonushub.bet",
@@ -334,6 +348,7 @@ a:hover{text-decoration:underline}
       <li><a href="#casinos">Top Casinos</a></li>
       <li><a href="guides.html">Guides &amp; Reviews</a></li>
       <li><a href="#how-it-works">How It Works</a></li>
+      <li><a href="#faq">FAQ</a></li>
       <li><a href="#responsible">Responsible Gaming</a></li>
       <li><a href="#legal">Legal</a></li>
     </ul>
@@ -705,6 +720,62 @@ a:hover{text-decoration:underline}
   </div>
 </section>
 
+<!-- FAQ Section — SEO structured data + visible content -->
+<section style="background:var(--dark2)" id="faq">
+  <div class="section" style="padding-top:3rem;padding-bottom:3rem">
+    <div class="section-eyebrow">Common questions</div>
+    <div class="section-title">Frequently Asked Questions</div>
+    <p class="section-sub" style="margin-bottom:1.75rem">Everything you need to know about crypto casino bonuses and how EliteBonusHub works.</p>
+    <div style="display:flex;flex-direction:column;gap:.65rem" id="faq-list">
+
+      <details style="background:var(--dark3);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.1rem 1.25rem;cursor:pointer">
+        <summary style="font-size:.95rem;font-weight:600;list-style:none;display:flex;justify-content:space-between;align-items:center">
+          What is a crypto casino bonus? <span style="color:var(--gold);font-size:1.1rem">+</span>
+        </summary>
+        <p style="margin-top:.85rem;font-size:.88rem;color:var(--muted);line-height:1.75">A crypto casino bonus is a promotional offer given by online casinos to new or existing players who deposit cryptocurrency. The most common type is a welcome bonus — a percentage match on your first deposit. For example, Stake offers a 200% bonus up to 1 BTC, meaning a 0.5 BTC deposit gives you 1.5 BTC to play with.</p>
+      </details>
+
+      <details style="background:var(--dark3);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.1rem 1.25rem;cursor:pointer">
+        <summary style="font-size:.95rem;font-weight:600;list-style:none;display:flex;justify-content:space-between;align-items:center">
+          What does No KYC mean at a crypto casino? <span style="color:var(--gold);font-size:1.1rem">+</span>
+        </summary>
+        <p style="margin-top:.85rem;font-size:.88rem;color:var(--muted);line-height:1.75">KYC stands for Know Your Customer — the identity verification process that traditional casinos require. No KYC casinos let you deposit, play, and withdraw without submitting a passport or ID. Stake, BC.Game, and most other crypto casinos on our list are no KYC, meaning you can start playing within minutes.</p>
+      </details>
+
+      <details style="background:var(--dark3);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.1rem 1.25rem;cursor:pointer">
+        <summary style="font-size:.95rem;font-weight:600;list-style:none;display:flex;justify-content:space-between;align-items:center">
+          What is provably fair gambling? <span style="color:var(--gold);font-size:1.1rem">+</span>
+        </summary>
+        <p style="margin-top:.85rem;font-size:.88rem;color:var(--muted);line-height:1.75">Provably fair is a cryptographic method that lets you independently verify that every game result was genuinely random and not manipulated by the casino. Before each game, the casino provides a hashed seed. After the game, you can verify the result matches the hash — proving no manipulation occurred. All casinos on our list use provably fair algorithms.</p>
+      </details>
+
+      <details style="background:var(--dark3);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.1rem 1.25rem;cursor:pointer">
+        <summary style="font-size:.95rem;font-weight:600;list-style:none;display:flex;justify-content:space-between;align-items:center">
+          Are EliteBonusHub affiliate links free to use? <span style="color:var(--gold);font-size:1.1rem">+</span>
+        </summary>
+        <p style="margin-top:.85rem;font-size:.88rem;color:var(--muted);line-height:1.75">Yes — completely free. Clicking our affiliate links costs you nothing and does not reduce your bonus. In fact our exclusive links often give you a higher bonus than going directly to the casino. We earn a commission from the casino when you sign up, which is how we keep the site free and ad-free.</p>
+      </details>
+
+      <details style="background:var(--dark3);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.1rem 1.25rem;cursor:pointer">
+        <summary style="font-size:.95rem;font-weight:600;list-style:none;display:flex;justify-content:space-between;align-items:center">
+          How fast are crypto casino withdrawals? <span style="color:var(--gold);font-size:1.1rem">+</span>
+        </summary>
+        <p style="margin-top:.85rem;font-size:.88rem;color:var(--muted);line-height:1.75">Crypto casino withdrawals are typically processed within minutes — sometimes under 60 seconds. Unlike bank transfers that take days, Bitcoin and Ethereum transactions confirm on the blockchain within minutes. Stake and BC.Game are known for the fastest withdrawals among our ranked casinos. The exact speed depends on blockchain congestion at the time of withdrawal.</p>
+      </details>
+
+      <details style="background:var(--dark3);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.1rem 1.25rem;cursor:pointer">
+        <summary style="font-size:.95rem;font-weight:600;list-style:none;display:flex;justify-content:space-between;align-items:center">
+          What cryptocurrencies do these casinos accept? <span style="color:var(--gold);font-size:1.1rem">+</span>
+        </summary>
+        <p style="margin-top:.85rem;font-size:.88rem;color:var(--muted);line-height:1.75">All casinos on our list accept Bitcoin (BTC) and Ethereum (ETH) as a minimum. Stake accepts BTC, ETH, SOL, LTC, DOGE, and more. BC.Game supports 100+ cryptocurrencies including all major altcoins. Cloudbet accepts BTC, ETH, USDT, LTC, and BCH. Most also support USDT for stablecoin deposits.</p>
+      </details>
+
+    </div>
+  </div>
+</section>
+<div class="divider"></div>
+
+
 <!-- Responsible gaming -->
 <section class="rg-section" id="responsible">
   <div class="section" style="padding-top:3rem;padding-bottom:3rem">
@@ -787,6 +858,7 @@ a:hover{text-decoration:underline}
       </ul></div>
       <div class="footer-col"><h4>Company</h4><ul>
         <li><a href="guides.html">All guides</a></li>
+        <li><a href="#faq">FAQ</a></li>
         <li><a href="#">How we review</a></li>
         <li><a href="#">Affiliate disclosure</a></li>
         <li><a href="#">Privacy policy</a></li>
