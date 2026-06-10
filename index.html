@@ -130,7 +130,7 @@ a:hover{text-decoration:underline}
 .divider{width:100%;height:1px;background:var(--border)}
 /* Casino cards */
 .casino-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.25rem}
-.casino-card{background:var(--dark3);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.5rem;display:flex;flex-direction:column;gap:.75rem;position:relative;transition:border-color .2s,transform .2s}
+.casino-card{background:var(--dark3);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.5rem;display:flex;flex-direction:column;gap:.75rem;position:relative;transition:border-color .2s,transform .2s;min-height:320px}
 .casino-card:hover{border-color:rgba(212,160,23,.5);transform:translateY(-2px)}
 .casino-card.featured{border-color:rgba(212,160,23,.35)}
 .featured-badge{position:absolute;top:-1px;right:20px;background:var(--gold);color:#000;font-size:11px;font-weight:700;padding:4px 12px;border-radius:0 0 8px 8px;letter-spacing:.05em}
@@ -148,7 +148,7 @@ a:hover{text-decoration:underline}
 .chip{font-size:11px;padding:3px 9px;border-radius:20px;background:var(--dark4);border:1px solid var(--border2);color:var(--muted);font-weight:500}
 .chip.green{background:rgba(34,197,94,.1);border-color:rgba(34,197,94,.3);color:#86efac}
 .chip.gold{background:rgba(212,160,23,.1);border-color:rgba(212,160,23,.3);color:var(--gold-lt)}
-.casino-cta{display:block;text-align:center;background:var(--gold);color:#000!important;font-weight:700;font-size:.88rem;padding:11px;border-radius:8px;margin-top:auto;transition:opacity .15s;letter-spacing:.02em}
+.casino-cta{display:block;text-align:center;background:var(--gold);color:#000!important;font-weight:700;font-size:.88rem;padding:11px;border-radius:8px;margin-top:auto;transition:opacity .15s;letter-spacing:.02em;flex-shrink:0}
 .casino-cta:hover{opacity:.85;text-decoration:none}
 .casino-cta.soon{background:var(--dark4);color:var(--muted)!important;border:1px solid var(--border2);cursor:default}
 /* Steps */
@@ -213,12 +213,12 @@ a:hover{text-decoration:underline}
 
 <!-- Google Analytics 4 — replace G-XXXXXXXXXX with your real Measurement ID -->
 <!-- Get yours free at analytics.google.com → Admin → Create Property -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-PS0DM4D48M"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-  gtag('config', 'G-PS0DM4D48M', {
+  gtag('config', 'G-XXXXXXXXXX', {
     page_title: document.title,
     page_location: window.location.href,
     // Track country/city demographics automatically
@@ -416,6 +416,9 @@ a:hover{text-decoration:underline}
 
     <!-- BC.GAME — real link -->
     <div class="casino-card">
+      <div style="background:#1a1a2e;border-radius:10px 10px 0 0;padding:.75rem 1rem;display:flex;align-items:center;justify-content:center;margin:-1.5rem -1.5rem .5rem -1.5rem">
+        <span style="font-family:'Cinzel',serif;font-size:1.1rem;font-weight:700;color:#6366F1;letter-spacing:.08em">BC.Game</span>
+      </div>
       <div class="casino-header">
         <div class="casino-icon" style="background:#6366F1;font-size:11px">#2</div>
         <div>
@@ -438,6 +441,9 @@ a:hover{text-decoration:underline}
 
     <!-- CLOUDBET — real link -->
     <div class="casino-card">
+      <div style="background:#1a0a3e;border-radius:10px 10px 0 0;padding:.75rem 1rem;display:flex;align-items:center;justify-content:center;margin:-1.5rem -1.5rem .5rem -1.5rem">
+        <span style="font-family:'Cinzel',serif;font-size:1.1rem;font-weight:700;color:#7c3aed;letter-spacing:.08em">Cloudbet</span>
+      </div>
       <div class="casino-header">
         <div class="casino-icon" style="background:#1a6cb8;font-size:11px">#3</div>
         <div>
@@ -461,6 +467,9 @@ a:hover{text-decoration:underline}
 
     <!-- ROLLBIT — no link yet -->
     <div class="casino-card">
+      <div style="background:#2a0a0a;border-radius:10px 10px 0 0;padding:.75rem 1rem;display:flex;align-items:center;justify-content:center;margin:-1.5rem -1.5rem .5rem -1.5rem">
+        <span style="font-family:'Cinzel',serif;font-size:1.1rem;font-weight:700;color:#EF4444;letter-spacing:.08em">Rollbit</span>
+      </div>
       <div class="casino-header">
         <div class="casino-icon" style="background:#EF4444;font-size:11px">#4</div>
         <div>
@@ -482,6 +491,9 @@ a:hover{text-decoration:underline}
 
     <!-- METASPINS -->
     <div class="casino-card">
+      <div style="background:#062a1a;border-radius:10px 10px 0 0;padding:.75rem 1rem;display:flex;align-items:center;justify-content:center;margin:-1.5rem -1.5rem .5rem -1.5rem">
+        <span style="font-family:'Cinzel',serif;font-size:1.1rem;font-weight:700;color:#10B981;letter-spacing:.08em">Metaspins</span>
+      </div>
       <div class="casino-header">
         <div class="casino-icon" style="background:#10B981;font-size:11px">#5</div>
         <div>
