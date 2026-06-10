@@ -213,10 +213,11 @@ var ARTICLES = [
 ];
 
 var liveSet = {};
+var lastCheck = 0;
 var currentFilter = 'all';
 
 function checkLive() {
-  fetch('https://api.github.com/repos/EBHBET/elitebonushub/contents/')
+  fetch('https://api.github.com/repos/EBHBET/elitebonushub/contents/?t=' + Date.now(), {headers:{'Cache-Control':'no-cache'}})
     .then(function(r){ return r.json(); })
     .then(function(files){
       var names = files.map(function(f){ return f.name; });

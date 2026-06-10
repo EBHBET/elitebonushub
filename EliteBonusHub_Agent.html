@@ -212,14 +212,41 @@ async function ghPush(path,content,msg){
   const repo=document.getElementById('k-ghr').value.trim();
   const token=document.getElementById('k-ght').value.trim();
   if(!user||!repo||!token) throw new Error('GitHub credentials missing — fill in Keys tab');
-  const enc=btoa(unescape(encodeURIComponent(content)));
-  const url=`https://api.github.com/repos/${user}/${repo}/contents/${path}`;
-  let sha;
-  try{const c=await fetch(url,{headers:{'Authorization':'token '+token,'Accept':'application/vnd.github.v3+json'}});if(c.ok){const d=await c.json();sha=d.sha;}}catch(e){}
-  const body={message:msg,content:enc};
-  if(sha) body.sha=sha;
-  const r=await fetch(url,{method:'PUT',headers:{'Authorization':'token '+token,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'},body:JSON.stringify(body)});
-  if(!r.ok){const e=await r.json();throw new Error(e.message||'GitHub error');}
+
+  // Encode content — handle large files
+  let enc;
+  try {
+    enc = btoa(unescape(encodeURIComponent(content)));
+  } catch(e) {
+    enc = btoa(encodeURIComponent(content).replace(/%([0-9A-F]{2})/g, function(m,p1){return String.fromCharCode('0x'+p1);}));
+  }
+
+  const headers = {
+    'Authorization': 'Bearer ' + token,
+    'Accept': 'application/vnd.github+json',
+    'X-GitHub-Api-Version': '2022-11-28',
+    'Content-Type': 'application/json'
+  };
+  const url = 'https://api.github.com/repos/' + user + '/' + repo + '/contents/' + path;
+
+  // Get existing file SHA (needed for updates)
+  let sha = null;
+  try {
+    const check = await fetch(url, {headers});
+    if(check.ok) {
+      const existing = await check.json();
+      sha = existing.sha;
+    }
+  } catch(e) {}
+
+  const body = {message: msg, content: enc};
+  if(sha) body.sha = sha;
+
+  const r = await fetch(url, {method:'PUT', headers, body:JSON.stringify(body)});
+  if(!r.ok) {
+    const err = await r.json().catch(()=>({}));
+    throw new Error('GitHub ' + r.status + ': ' + (err.message||'unknown error') + (err.errors?JSON.stringify(err.errors):''));
+  }
   return true;
 }
 
@@ -247,7 +274,7 @@ async function validateKeys(){
   const ght=document.getElementById('k-ght').value.trim();
   if(ghu&&ght){
     try{
-      const r=await fetch('https://api.github.com/user',{headers:{'Authorization':'token '+ght}});
+      const r=await fetch('https://api.github.com/user',{headers:{'Authorization':'Bearer '+ght,'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}});
       if(r.ok){
         const d=await r.json();
         res.push(`<span class="badge bs">✓ GitHub: @${d.login}</span>`);
@@ -322,7 +349,22 @@ async function runFull(){
     rlog('[3/5] Writing SEO article...');
     const body=await callClaude(
       'You are a senior crypto casino content writer for EliteBonusHub.com.\n\nCRITICAL: Output clean HTML ONLY. No markdown, no code fences, no triple backticks.\nCRITICAL: Use ONLY the year 2026. Never write 2024 or 2025.\nCRITICAL: Start your output directly with an h1 tag. Nothing before it.\n\nWrite a 1,400+ word professional article using this exact HTML structure:\n\n<h1>[Article title]</h1>\n<p class="intro">[2-3 sentence engaging introduction]</p>\n\n<div class="quick-verdict"><h3>Quick Verdict</h3><p>[Expert summary for 2026]</p></div>\n\n<h2>[Main topic section]</h2>\n<p>[Detailed paragraphs covering the topic thoroughly]</p>\n\n<h2>Top Recommended Casinos 2026</h2>\n<div class="casino-picks">\n<div class="pick-card"><h3>1. Stake Casino — Best Overall</h3><p>200% welcome bonus up to 1 BTC. No KYC. Provably fair. Instant withdrawals.</p><a href="https://stake.com/?c=M8AE5RDv" rel="nofollow sponsored" target="_blank" class="cta-btn">Claim Bonus at Stake</a></div>\n<div class="pick-card"><h3>2. BC.Game — Best Altcoins</h3><p>180% up to 3 BTC. 100+ cryptocurrencies. Provably fair.</p><a href="https://bc.game/i-97mlzobrj1-n/" rel="nofollow sponsored" target="_blank" class="cta-btn">Claim Bonus at BC.Game</a></div>\n<div class="pick-card"><h3>3. Cloudbet — Best High Roller</h3><p>100% up to 5 BTC + $2,500 rewards. Whale Mode no-limit bets.</p><a href="https://cldbt.cloud/go/en/landing/bitcoin-casino?af_token=e7d441743c4fdf2721dd3700d64d3919&aftm_campaign=1st" rel="nofollow sponsored" target="_blank" class="cta-btn">Claim Bonus at Cloudbet</a></div>\n</div>\n\n<table class="comparison-table"><thead><tr><th>Casino</th><th>Bonus</th><th>No KYC</th><th>Rating</th></tr></thead><tbody><tr><td>Stake</td><td>200% up to 1 BTC</td><td>Yes</td><td>4.9/5</td></tr><tr><td>BC.Game</td><td>180% up to 3 BTC</td><td>Yes</td><td>4.8/5</td></tr><tr><td>Cloudbet</td><td>100% up to 5 BTC</td><td>Yes</td><td>4.7/5</td></tr></tbody></table>\n\n<div class="pros-cons"><div class="pros"><h4>Pros</h4><ul><li>[Pro 1 specific to topic]</li><li>[Pro 2]</li><li>[Pro 3]</li></ul></div><div class="cons"><h4>Cons</h4><ul><li>[Con 1]</li><li>[Con 2]</li></ul></div></div>\n\n<h2>[Additional section — FAQ or strategy]</h2>\n<p>[Helpful content...]</p>\n\n<h2>Final Verdict 2026</h2>\n<p>[Concluding recommendation]</p>',
-      `Title: "${topic.title}". Keyword: "${topic.kw}". Research: ${research.slice(0,300)}.\n\nAffiliate links to embed naturally:\n${affStr}`,
+      `Write the article now. Use these exact details:
+
+TITLE: ${topic.title}
+KEYWORD: ${topic.kw}
+YEAR: 2026 (always — never use 2024 or 2025)
+
+MANDATORY AFFILIATE LINKS — embed these naturally in the article text AND in the casino picks section:
+- Stake Casino: https://stake.com/?c=M8AE5RDv — bonus: 200% up to 1 BTC, no KYC
+- BC.Game: https://bc.game/i-97mlzobrj1-n/ — bonus: 180% up to 3 BTC, 100+ coins
+- Cloudbet: https://cldbt.cloud/go/en/landing/bitcoin-casino?af_token=e7d441743c4fdf2721dd3700d64d3919&aftm_campaign=1st — bonus: 100% up to 5 BTC + $2,500, Whale Mode
+
+FORMAT RULES:
+- Output ONLY clean HTML starting with <h1>
+- NO markdown, NO backticks, NO code fences
+- Every casino mention should link to its affiliate URL using: <a href="URL" rel="nofollow sponsored" target="_blank" class="cta-btn">text</a>
+- Include the full casino-picks div, comparison table, and pros-cons grid as instructed`,
       1000
     );
     const slug=topic.title.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'');
