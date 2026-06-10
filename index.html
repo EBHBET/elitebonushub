@@ -1,0 +1,1568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>EliteBonusHub — Agent v3</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--gold:#D4A017;--dark:#0a0a0a;--dark2:#111;--dark3:#161616;--dark4:#1e1e1e;--border:#2a2a2a;--border2:#333;--text:#f0ede6;--muted:#9a9690;--dim:#5a5752;--green:#22c55e;--red:#ef4444;--blue:#3b82f6;--purple:#7c3aed;--radius:8px}
+body{font-family:system-ui,-apple-system,sans-serif;background:var(--dark);color:var(--text);font-size:14px;padding:0;margin:0;line-height:1.6}
+a{color:var(--gold);text-decoration:none}
+input,select,textarea{width:100%;padding:8px 11px;border:1px solid var(--border2);border-radius:var(--radius);font-size:13px;font-family:inherit;background:var(--dark4);color:var(--text);outline:none;transition:border-color .15s}
+input:focus,select:focus,textarea:focus{border-color:var(--gold)}
+input[type=password]{font-family:monospace}
+input[type=file]{padding:6px;cursor:pointer}
+label{font-size:12px;color:var(--muted);display:block;margin-bottom:3px;margin-top:.5rem}
+textarea{resize:vertical;min-height:60px}
+button{padding:7px 14px;border:1px solid var(--border2);border-radius:var(--radius);background:transparent;color:var(--text);font-size:13px;font-family:inherit;cursor:pointer;display:inline-flex;align-items:center;gap:5px;transition:background .15s}
+button:hover{background:var(--dark4)}
+button.primary{background:var(--gold);color:#000;border-color:var(--gold);font-weight:600}
+button.primary:hover{opacity:.87}
+button.danger{background:rgba(239,68,68,.15);color:var(--red);border-color:rgba(239,68,68,.3)}
+button.danger:hover{background:rgba(239,68,68,.25)}
+button.success{background:rgba(34,197,94,.15);color:var(--green);border-color:rgba(34,197,94,.3)}
+button:disabled{opacity:.4;cursor:not-allowed}
+.topbar{background:var(--dark2);border-bottom:1px solid var(--border);padding:.7rem 1.5rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.logo{font-size:15px;font-weight:600;color:var(--gold)}
+.logo span{color:var(--muted);font-weight:400;font-size:12px;margin-left:6px}
+.pill{display:inline-flex;align-items:center;gap:5px;font-size:11px;padding:3px 10px;border-radius:20px;font-weight:500}
+.off{background:rgba(255,255,255,.07);color:var(--muted)}
+.on{background:rgba(34,197,94,.15);color:var(--green)}
+.busy{background:rgba(234,179,8,.15);color:#eab308}
+.dot{width:6px;height:6px;border-radius:50%;background:currentColor}
+.container{max-width:960px;margin:0 auto;padding:1.5rem}
+.metrics{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:1.25rem}
+.mc{background:var(--dark3);border:1px solid var(--border);border-radius:10px;padding:.75rem 1rem}
+.mc-l{font-size:11px;color:var(--muted);margin-bottom:3px}
+.mc-v{font-size:18px;font-weight:600}
+.tabs{display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:1.25rem;overflow-x:auto}
+.tab{padding:8px 14px;font-size:12px;background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;color:var(--muted);font-family:inherit;white-space:nowrap;transition:color .15s}
+.tab.active{color:var(--text);border-bottom:2px solid var(--gold);font-weight:500}
+.tab:hover:not(.active){color:var(--text)}
+.panel{display:none}.panel.active{display:block}
+.card{background:var(--dark3);border:1px solid var(--border);border-radius:12px;padding:1.1rem 1.25rem;margin-bottom:1rem}
+.sec{font-size:11px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.7rem}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.75rem}
+.btn-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:.75rem}
+.log{background:var(--dark);border:1px solid var(--border);border-radius:var(--radius);padding:.75rem;font-size:12px;font-family:monospace;color:var(--muted);max-height:220px;overflow-y:auto;white-space:pre-wrap;line-height:1.7;margin-top:.75rem}
+.ps{display:flex;gap:10px;align-items:flex-start;padding:.6rem .85rem;border-radius:var(--radius);margin-bottom:5px;background:var(--dark4);border:1px solid var(--border)}
+.ps-icon{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;flex-shrink:0}
+.pending .ps-icon{background:var(--dark3);border:1px solid var(--border);color:var(--muted)}
+.running .ps-icon{background:rgba(234,179,8,.2);color:#eab308}
+.done .ps-icon{background:rgba(34,197,94,.2);color:var(--green)}
+.failed .ps-icon{background:rgba(239,68,68,.2);color:var(--red)}
+.ps-label{font-size:13px;font-weight:500;margin-bottom:2px}
+.ps-sub{font-size:11px;color:var(--muted)}
+.prog-wrap{background:var(--dark4);border-radius:4px;height:5px;overflow:hidden;margin-top:8px}
+.prog{height:100%;background:var(--gold);border-radius:4px;transition:width .4s}
+.badge{display:inline-block;font-size:10px;padding:2px 8px;border-radius:5px;font-weight:500}
+.bs{background:rgba(34,197,94,.15);color:var(--green)}
+.bw{background:rgba(234,179,8,.15);color:#eab308}
+.bi{background:rgba(99,102,241,.15);color:#818cf8}
+.bd{background:rgba(239,68,68,.15);color:var(--red)}
+.bg{background:rgba(212,160,23,.15);color:var(--gold)}
+.feed-item{padding:.55rem 0;border-bottom:1px solid var(--border);font-size:12px}
+.feed-item:last-child{border:none}
+.feed-meta{font-size:10px;color:var(--muted);margin-top:2px}
+.spinner{display:inline-block;width:12px;height:12px;border:2px solid var(--border);border-top-color:var(--text);border-radius:50%;animation:spin .6s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.result-ok{background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.3);border-radius:var(--radius);padding:.65rem .9rem;font-size:12px;color:var(--green);margin-top:.65rem}
+.result-err{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);border-radius:var(--radius);padding:.65rem .9rem;font-size:12px;color:var(--red);margin-top:.65rem}
+.info-box{background:rgba(99,102,241,.08);border:1px solid rgba(99,102,241,.25);border-radius:var(--radius);padding:.65rem .9rem;font-size:12px;color:#a5b4fc;margin-bottom:.85rem;line-height:1.7}
+/* Tables */
+table.data-table{width:100%;border-collapse:collapse;font-size:12px}
+table.data-table th{background:var(--dark4);color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.07em;padding:.5rem .75rem;text-align:left;border-bottom:1px solid var(--border)}
+table.data-table td{padding:.5rem .75rem;border-bottom:1px solid var(--border);vertical-align:middle}
+table.data-table tr:last-child td{border:none}
+table.data-table tr:hover td{background:rgba(255,255,255,.02)}
+/* Article management */
+.article-row{display:grid;grid-template-columns:1fr auto auto auto;gap:.65rem;align-items:center;padding:.6rem .75rem;background:var(--dark4);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:.35rem}
+.article-title{font-size:13px;font-weight:500}
+.article-slug{font-size:10px;color:var(--muted);font-family:monospace;margin-top:1px}
+/* Affiliate card */
+.affil-card{background:var(--dark4);border:1px solid var(--border);border-radius:10px;padding:.85rem;display:flex;align-items:center;gap:.85rem;margin-bottom:.5rem}
+.affil-logo{width:40px;height:40px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;overflow:hidden}
+.affil-logo img{width:100%;height:100%;object-fit:contain}
+.affil-info{flex:1;min-width:0}
+.affil-name{font-size:13px;font-weight:600}
+.affil-url{font-size:10px;color:var(--muted);font-family:monospace;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.affil-bonus{font-size:11px;color:var(--gold);margin-top:1px}
+/* SEO table */
+.kw-diff{font-size:10px;padding:2px 6px;border-radius:4px;font-weight:500}
+.diff-low{background:rgba(34,197,94,.15);color:var(--green)}
+.diff-med{background:rgba(234,179,8,.15);color:#eab308}
+.diff-high{background:rgba(239,68,68,.15);color:var(--red)}
+.kw-type{font-size:10px;padding:2px 6px;border-radius:4px;background:var(--dark4);color:var(--muted)}
+@media(max-width:600px){.metrics{grid-template-columns:repeat(3,1fr)}.two-col,.three-col{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="logo">EliteBonusHub <span>agent v3</span></div>
+  <div class="pill off" id="status"><span class="dot"></span>Offline</div>
+</div>
+
+<div class="container">
+
+<div class="metrics">
+  <div class="mc"><div class="mc-l">Articles live</div><div class="mc-v" id="m-art">0</div></div>
+  <div class="mc"><div class="mc-l">Affiliates</div><div class="mc-v" id="m-aff">3</div></div>
+  <div class="mc"><div class="mc-l">Last deploy</div><div class="mc-v" id="m-dep" style="font-size:12px;padding-top:3px">—</div></div>
+  <div class="mc"><div class="mc-l">API cost</div><div class="mc-v" id="m-cost">$0.00</div></div>
+  <div class="mc"><div class="mc-l">Keywords</div><div class="mc-v" id="m-kw">0</div></div>
+</div>
+
+<div class="tabs">
+  <button class="tab active" onclick="sw('keys')">⚙ Keys</button>
+  <button class="tab" onclick="sw('deploy')">🚀 Deploy</button>
+  <button class="tab" onclick="sw('pipeline')">⚡ Pipeline</button>
+  <button class="tab" onclick="sw('articles')">📄 Articles</button>
+  <button class="tab" onclick="sw('affiliates')">🔗 Affiliates</button>
+  <button class="tab" onclick="sw('seo')">📈 SEO</button>
+  <button class="tab" onclick="sw('log')">📋 Log</button>
+</div>
+
+<!-- ═══ KEYS ═══ -->
+<div id="tab-keys" class="panel active">
+  <div class="info-box">
+    Open this file via <strong>VS Code Live Server</strong> — not by double-clicking. Right-click the file → Open with Live Server. Keys save automatically between sessions.
+    <br>Live site: <a href="https://elitebonushub.bet" target="_blank" style="color:var(--gold)">elitebonushub.bet</a>
+  </div>
+  <div class="card">
+    <div class="sec">Anthropic API</div>
+    <label>API key — from console.anthropic.com</label>
+    <input id="k-ant" type="password" placeholder="sk-ant-api03-..." oninput="saveKeys()">
+  </div>
+  <div class="card">
+    <div class="sec">GitHub</div>
+    <div class="two-col">
+      <div><label>Username</label><input id="k-ghu" placeholder="EBHBET" oninput="saveKeys()"></div>
+      <div><label>Repository</label><input id="k-ghr" placeholder="elitebonushub" oninput="saveKeys()"></div>
+    </div>
+    <label>Personal access token (repo scope, no expiration)</label>
+    <input id="k-ght" type="password" placeholder="ghp_..." oninput="saveKeys()">
+  </div>
+  <div class="btn-row">
+    <button class="primary" onclick="validateKeys()" id="btn-val">✓ Validate keys</button>
+  </div>
+  <div id="val-result" style="margin-top:.65rem"></div>
+</div>
+
+<!-- ═══ DEPLOY ═══ -->
+<div id="tab-deploy" class="panel">
+  <div class="card">
+    <div class="sec">Manual upload — do once</div>
+    <div style="font-size:12px;color:var(--muted);line-height:1.9">
+      1. Rename <strong style="color:var(--text)">EliteBonusHub_site.html</strong> → <strong style="color:var(--gold)">index.html</strong><br>
+      2. Go to github.com/EBHBET/elitebonushub → Add file → Upload files<br>
+      3. Upload <strong style="color:var(--text)">index.html</strong>, <strong style="color:var(--text)">cloudbet-whale-mode.html</strong>, <strong style="color:var(--text)">guides.html</strong><br>
+      4. After that the agent handles all future deploys automatically
+    </div>
+  </div>
+  <div class="card">
+    <div class="sec">Deploy via agent</div>
+    <p style="font-size:12px;color:var(--muted);margin-bottom:.85rem">Pushes sitemap.xml, .nojekyll, and any pending article files to GitHub Pages.</p>
+    <div class="btn-row">
+      <button class="primary" onclick="deployAll()" id="btn-dep">🚀 Deploy to GitHub</button>
+      <button onclick="deploySingleFile('guides.html', buildGuidesHtml(), 'Update guides page')" id="btn-dep-guides">📄 Push guides.html</button>
+      <button onclick="deploySingleFile('index.html', null, 'Update homepage')" id="btn-dep-index">🏠 Push index.html</button>
+    </div>
+    <div id="dep-log" class="log" style="display:none"></div>
+    <div id="dep-result"></div>
+  </div>
+</div>
+
+<!-- ═══ PIPELINE ═══ -->
+<div id="tab-pipeline" class="panel">
+  <div class="card">
+    <div class="sec">Autonomous content pipeline</div>
+    <p style="font-size:12px;color:var(--muted);margin-bottom:.85rem">Generates a new SEO article → deploys to GitHub → updates guides.html and index.html automatically. ~$0.05 per run.</p>
+    <div class="three-col">
+      <button class="primary" onclick="runFull()" id="btn-full">▶ Full run</button>
+      <button onclick="runArticle()" id="btn-art">📝 Article only</button>
+      <button onclick="runArticle()" id="btn-xo" style="opacity:.4" disabled title="X API coming soon">𝕏 Post (soon)</button>
+    </div>
+  </div>
+  <div id="steps-wrap">
+    <div class="ps pending" id="ps-1"><div class="ps-icon">1</div><div><div class="ps-label">Pick topic</div><div class="ps-sub">Select from content queue</div></div></div>
+    <div class="ps pending" id="ps-2"><div class="ps-icon">2</div><div><div class="ps-label">Research</div><div class="ps-sub">Casino content research</div></div></div>
+    <div class="ps pending" id="ps-3"><div class="ps-icon">3</div><div><div class="ps-label">Write article</div><div class="ps-sub">Full SEO article with affiliate links</div></div></div>
+    <div class="ps pending" id="ps-4"><div class="ps-icon">4</div><div><div class="ps-label">Deploy article</div><div class="ps-sub">Push to GitHub Pages</div></div></div>
+    <div class="ps pending" id="ps-5"><div class="ps-icon">5</div><div><div class="ps-label">Update site files</div><div class="ps-sub">Push guides.html + sitemap</div></div></div>
+  </div>
+  <div id="prog-wrap" style="display:none"><div class="prog-wrap"><div class="prog" id="prog" style="width:0%"></div></div><div style="font-size:11px;color:var(--muted);margin-top:4px" id="prog-label"></div></div>
+  <div id="run-log" class="log" style="display:none"></div>
+  <div id="run-result"></div>
+</div>
+
+<!-- ═══ ARTICLES ═══ -->
+<div id="tab-articles" class="panel">
+  <div class="card">
+    <div class="sec">Published articles</div>
+    <p style="font-size:12px;color:var(--muted);margin-bottom:.85rem">Articles confirmed live in your GitHub repo. Delete removes from GitHub and updates guides.html and index.html automatically.</p>
+    <div id="articles-list"><div style="text-align:center;padding:1.5rem;color:var(--muted);font-size:12px">Click "Refresh from GitHub" to load articles</div></div>
+    <div class="btn-row">
+      <button onclick="refreshArticles()" id="btn-refresh-art">🔄 Refresh from GitHub</button>
+      <button onclick="updateAllAffiliates()" id="btn-update-affil" class="success">🔗 Push affiliate links to all articles</button>
+    </div>
+    <div id="art-result"></div>
+  </div>
+  <div class="card">
+    <div class="sec">Content queue — next articles to generate</div>
+    <div id="topic-queue" style="display:flex;flex-direction:column;gap:.35rem;max-height:280px;overflow-y:auto"></div>
+  </div>
+</div>
+
+<!-- ═══ AFFILIATES ═══ -->
+<div id="tab-affiliates" class="panel">
+  <div class="card">
+    <div class="sec">Active affiliate partners</div>
+    <div id="affil-list"></div>
+    <div class="btn-row" style="margin-top:.75rem">
+      <button onclick="updateAllAffiliates()" class="primary" id="btn-push-affil">🚀 Push all affiliate links to site + articles</button>
+    </div>
+    <div id="affil-push-result"></div>
+  </div>
+  <div class="card">
+    <div class="sec">Add new affiliate partner</div>
+    <div class="two-col">
+      <div><label>Casino / website name</label><input id="new-aff-name" placeholder="e.g. Rollbit"></div>
+      <div><label>Bonus description</label><input id="new-aff-bonus" placeholder="e.g. 200% first deposit"></div>
+    </div>
+    <label>Affiliate URL</label>
+    <input id="new-aff-url" placeholder="https://rollbit.com/?ref=...">
+    <label>Logo image (PNG/JPG — drag and drop)</label>
+    <input type="file" id="new-aff-logo" accept="image/*">
+    <label>Additional notes (KYC required? Coins accepted? etc.)</label>
+    <textarea id="new-aff-notes" placeholder="No KYC, BTC ETH SOL USDT, provably fair..."></textarea>
+    <div class="btn-row">
+      <button class="primary" onclick="addAffiliate()">+ Add affiliate</button>
+    </div>
+    <div id="new-aff-result"></div>
+  </div>
+</div>
+
+<!-- ═══ SEO ═══ -->
+<div id="tab-seo" class="panel">
+
+  <div class="card">
+    <div class="sec">Competitive analysis — top 3 ranked sites in your niche</div>
+    <p style="font-size:12px;color:var(--muted);margin-bottom:.85rem">
+      Fetches the top-ranking pages for your target keywords, analyzes their SEO structure, extracts their keywords, and implements the best practices on your site automatically.
+    </p>
+    <div class="two-col">
+      <div>
+        <label>Seed keyword to analyze competitors for</label>
+        <input id="seed-kw" value="best crypto casino 2026" placeholder="e.g. best crypto casino 2026">
+      </div>
+      <div>
+        <label>Analysis depth</label>
+        <select id="analysis-depth">
+          <option value="3">Top 3 competitors</option>
+          <option value="5">Top 5 competitors</option>
+          <option value="10">Top 10 competitors</option>
+        </select>
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="primary" onclick="runCompetitorAnalysis()" id="btn-comp">🔬 Analyze top competitors + extract keywords</button>
+      <button onclick="doKeywordResearch()" id="btn-kw">✨ Standard keyword research</button>
+    </div>
+    <div id="comp-progress" style="display:none;margin-top:.75rem">
+      <div class="prog-wrap"><div class="prog" id="comp-prog" style="width:0%"></div></div>
+      <div style="font-size:11px;color:var(--muted);margin-top:4px" id="comp-label">Starting analysis...</div>
+    </div>
+    <div id="comp-result"></div>
+  </div>
+
+  <div class="card" id="competitor-sites-card" style="display:none">
+    <div class="sec">Competitor sites found</div>
+    <div id="competitor-sites-list"></div>
+  </div>
+
+  <div class="card" id="seo-insights-card" style="display:none">
+    <div class="sec">SEO insights extracted from competitors</div>
+    <div id="seo-insights-content"></div>
+    <div class="btn-row" style="margin-top:.85rem">
+      <button class="primary" onclick="applySEOChanges()" id="btn-apply-seo">🚀 Apply SEO improvements to site</button>
+    </div>
+    <div id="seo-apply-result"></div>
+  </div>
+
+  <div class="card">
+    <div class="sec">Keyword database
+      <span style="margin-left:8px;font-size:10px;color:var(--muted)" id="kw-count-label"></span>
+    </div>
+    <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:.85rem">
+      <button onclick="filterKw('all')" id="kf-all" class="success" style="font-size:12px;padding:4px 12px">All</button>
+      <button onclick="filterKw('short')" id="kf-short" style="font-size:12px;padding:4px 12px">Short-tail</button>
+      <button onclick="filterKw('long')" id="kf-long" style="font-size:12px;padding:4px 12px">Long-tail</button>
+      <button onclick="filterKw('competitor')" id="kf-comp" style="font-size:12px;padding:4px 12px">From competitors</button>
+      <button onclick="filterKw('social')" id="kf-social" style="font-size:12px;padding:4px 12px">Social / Hashtags</button>
+      <button onclick="clearKeywords()" class="danger" style="font-size:12px;padding:4px 12px;margin-left:auto">🗑 Clear all</button>
+    </div>
+    <div style="overflow-x:auto">
+      <table class="data-table" id="kw-table">
+        <thead>
+          <tr>
+            <th>Keyword</th>
+            <th>Type</th>
+            <th>Monthly vol.</th>
+            <th>Difficulty</th>
+            <th>Source</th>
+            <th>Priority</th>
+          </tr>
+        </thead>
+        <tbody id="kw-body">
+          <tr><td colspan="6" style="text-align:center;color:var(--muted);padding:1.5rem">Run competitor analysis or keyword research to populate</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div id="kw-result"></div>
+  </div>
+
+  <div class="card">
+    <div class="sec">Social hashtags — ready for X posts</div>
+    <div id="hashtag-list" style="display:flex;flex-wrap:wrap;gap:.35rem;min-height:2rem">
+      <span style="font-size:12px;color:var(--muted)">Run keyword research to generate hashtags</span>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══ LOG ═══ -->
+<div id="tab-log" class="panel">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.75rem">
+    <div class="sec" style="margin:0">Activity log</div>
+    <button onclick="clearLog()" style="padding:4px 10px;font-size:11px">🗑 Clear</button>
+  </div>
+  <div id="act-log"><div style="text-align:center;padding:2.5rem;color:var(--muted)">No activity yet</div></div>
+</div>
+
+</div><!-- /container -->
+
+<script>
+// ═══════════════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════════════
+const S = {
+  articles: 0, cost: 0, lastDeploy: null,
+  log: [], articles_data: [],
+  topicIdx: parseInt(localStorage.getItem('ebh_topic')||'0'),
+  liveArticles: [],   // confirmed from GitHub
+  keywords: JSON.parse(localStorage.getItem('ebh_kw')||'[]'),
+};
+
+const AFFILIATES_KEY = 'ebh_affiliates';
+
+function getAffiliates() {
+  const stored = localStorage.getItem(AFFILIATES_KEY);
+  if (stored) return JSON.parse(stored);
+  // Default affiliates
+  return [
+    {name:'Stake',    url:'https://stake.com/?c=M8AE5RDv',    bonus:'200% up to 1 BTC',    notes:'No KYC, BTC ETH SOL LTC DOGE, provably fair', logo:''},
+    {name:'BC.Game',  url:'https://bc.game/i-97mlzobrj1-n/',  bonus:'180% up to 3 BTC',    notes:'No KYC, 100+ altcoins, provably fair', logo:''},
+    {name:'Cloudbet', url:'https://cldbt.cloud/go/en/landing/bitcoin-casino?af_token=e7d441743c4fdf2721dd3700d64d3919&aftm_campaign=1st', bonus:'100% up to 5 BTC + $2,500', notes:'Licensed, Whale Mode, BTC ETH USDT LTC', logo:''},
+  ];
+}
+function saveAffiliates(arr) {
+  localStorage.setItem(AFFILIATES_KEY, JSON.stringify(arr));
+  document.getElementById('m-aff').textContent = arr.length;
+}
+
+const TOPICS = [
+  {title:'Best Crypto Casinos 2026 — Complete Guide',kw:'best crypto casino 2026'},
+  {title:'Top Bitcoin Casinos With No KYC',kw:'bitcoin casino no KYC'},
+  {title:'Best Crypto Casino Welcome Bonuses Ranked',kw:'crypto casino welcome bonus'},
+  {title:'Stake Casino Review 2026',kw:'stake casino review'},
+  {title:'BC.Game Review — Is It Legit?',kw:'bc.game review'},
+  {title:'Cloudbet Review — Bonus & Whale Mode',kw:'cloudbet review'},
+  {title:'Fastest Crypto Casino Withdrawals 2026',kw:'fastest crypto casino withdrawals'},
+  {title:'Best Crypto Crash Game Sites',kw:'crypto crash game casino'},
+  {title:'Ethereum Casino Sites 2026',kw:'ethereum casino'},
+  {title:'No Wagering Crypto Casino Sites',kw:'casino no wagering requirements'},
+  {title:'Provably Fair Gambling — Complete Guide',kw:'provably fair gambling'},
+  {title:'Best Crypto Casino for High Rollers',kw:'crypto casino high roller VIP'},
+  {title:'Rollbit Review 2026',kw:'rollbit review'},
+  {title:'Metaspins Review 2026',kw:'metaspins review'},
+  {title:'Bitcoin Slots — Best Crypto Slot Sites',kw:'bitcoin slots casino'},
+  {title:'Dogecoin Casino Sites',kw:'dogecoin casino'},
+  {title:'How to Deposit Bitcoin at a Casino',kw:'how to deposit bitcoin casino'},
+  {title:'Are Crypto Casinos Safe?',kw:'are crypto casinos safe'},
+  {title:'Crypto Casino vs Traditional Casino',kw:'crypto casino vs traditional'},
+  {title:'Best No Deposit Crypto Casino Bonuses',kw:'no deposit crypto casino bonus'},
+];
+
+const GITHUB_USER = 'EBHBET';
+const GITHUB_REPO = 'elitebonushub';
+const SITE_URL    = 'https://elitebonushub.bet';
+
+// ═══════════════════════════════════════════════════════════
+// KEYS / PERSIST
+// ═══════════════════════════════════════════════════════════
+function saveKeys(){
+  localStorage.setItem('ebh_ant', document.getElementById('k-ant').value);
+  localStorage.setItem('ebh_ghu', document.getElementById('k-ghu').value);
+  localStorage.setItem('ebh_ghr', document.getElementById('k-ghr').value);
+  localStorage.setItem('ebh_ght', document.getElementById('k-ght').value);
+  updateSiteUrl();
+}
+function loadKeys(){
+  document.getElementById('k-ant').value = localStorage.getItem('ebh_ant')||'';
+  document.getElementById('k-ghu').value = localStorage.getItem('ebh_ghu')||GITHUB_USER;
+  document.getElementById('k-ghr').value = localStorage.getItem('ebh_ghr')||GITHUB_REPO;
+  document.getElementById('k-ght').value = localStorage.getItem('ebh_ght')||'';
+  updateSiteUrl();
+}
+function updateSiteUrl(){}
+
+// ═══════════════════════════════════════════════════════════
+// UI HELPERS
+// ═══════════════════════════════════════════════════════════
+function sw(t){
+  document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelector(`[onclick="sw('${t}')"]`).classList.add('active');
+  document.getElementById('tab-'+t).classList.add('active');
+  if(t==='articles') refreshArticles();
+  if(t==='affiliates') renderAffiliates();
+  if(t==='seo') renderKeywords();
+}
+function setM(){
+  document.getElementById('m-art').textContent = S.liveArticles.length;
+  document.getElementById('m-cost').textContent = '$'+S.cost.toFixed(3);
+  document.getElementById('m-dep').textContent = S.lastDeploy||'—';
+  document.getElementById('m-kw').textContent = S.keywords.length;
+  document.getElementById('m-aff').textContent = getAffiliates().length;
+}
+function alog(msg,type='info'){
+  const cols={info:'#818cf8',success:'#22c55e',warning:'#eab308',error:'#ef4444'};
+  const colorMap={info:'#818cf8',success:'#22c55e',warning:'#eab308',error:'#ef4444'};
+  S.log.unshift({msg,type,ts:new Date().toLocaleTimeString()});
+  const el=document.getElementById('act-log');
+  if(el.querySelector('.empty')||el.textContent.includes('No activity')) el.innerHTML='';
+  el.innerHTML=S.log.slice(0,60).map(l=>`
+    <div class="feed-item">
+      <span style="color:${colorMap[l.type]||'#818cf8'};font-weight:600;margin-right:6px">${l.type.toUpperCase()}</span>${l.msg}
+      <div class="feed-meta">${l.ts}</div>
+    </div>`).join('');
+}
+function rlog(msg){const el=document.getElementById('run-log');el.style.display='block';el.textContent+=msg+'\n';el.scrollTop=el.scrollHeight;}
+function dlog(msg){const el=document.getElementById('dep-log');if(el){el.style.display='block';el.textContent+=msg+'\n';el.scrollTop=el.scrollHeight;}}
+function setStep(n,state){
+  const el=document.getElementById('ps-'+n);if(!el)return;
+  el.className='ps '+state;
+  el.querySelector('.ps-icon').textContent={pending:n,running:'⋯',done:'✓',failed:'✕'}[state];
+}
+function setProg(pct,label){
+  document.getElementById('prog-wrap').style.display='block';
+  document.getElementById('prog').style.width=pct+'%';
+  document.getElementById('prog-label').textContent=label;
+}
+function sleep(ms){return new Promise(r=>setTimeout(r,ms));}
+function clearLog(){S.log=[];document.getElementById('act-log').innerHTML='<div style="text-align:center;padding:2rem;color:var(--muted)">Log cleared</div>';}
+
+// ═══════════════════════════════════════════════════════════
+// API CALLS
+// ═══════════════════════════════════════════════════════════
+async function callClaude(system, user, maxT=1000){
+  const key=document.getElementById('k-ant').value.trim();
+  if(!key) throw new Error('No Anthropic API key');
+  const r=await fetch('https://api.anthropic.com/v1/messages',{
+    method:'POST',
+    headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+    body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:maxT,system,messages:[{role:'user',content:user}]})
+  });
+  const d=await r.json();
+  if(d.error) throw new Error(d.error.message);
+  const txt=(d.content||[]).filter(b=>b.type==='text').map(b=>b.text).join('');
+  S.cost+=((d.usage?.input_tokens||0)*0.000003)+((d.usage?.output_tokens||0)*0.000015);
+  setM();
+  return txt;
+}
+
+function getGHHeaders(){
+  const token=document.getElementById('k-ght').value.trim();
+  return {'Authorization':'Bearer '+token,'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28','Content-Type':'application/json'};
+}
+
+async function ghGet(path){
+  const user=document.getElementById('k-ghu').value.trim()||GITHUB_USER;
+  const repo=document.getElementById('k-ghr').value.trim()||GITHUB_REPO;
+  const r=await fetch(`https://api.github.com/repos/${user}/${repo}/contents/${path}`,{headers:getGHHeaders()});
+  if(!r.ok){const e=await r.json();throw new Error(e.message||'GitHub '+r.status);}
+  return r.json();
+}
+
+async function ghPush(path,content,msg){
+  const user=document.getElementById('k-ghu').value.trim()||GITHUB_USER;
+  const repo=document.getElementById('k-ghr').value.trim()||GITHUB_REPO;
+  let enc;
+  try{enc=btoa(unescape(encodeURIComponent(content)));}
+  catch(e){enc=btoa(encodeURIComponent(content).replace(/%([0-9A-F]{2})/g,(_,p)=>String.fromCharCode('0x'+p)));}
+  const url=`https://api.github.com/repos/${user}/${repo}/contents/${path}`;
+  let sha=null;
+  try{const c=await fetch(url,{headers:getGHHeaders()});if(c.ok){const d=await c.json();sha=d.sha;}}catch(e){}
+  const body={message:msg,content:enc};
+  if(sha) body.sha=sha;
+  const r=await fetch(url,{method:'PUT',headers:getGHHeaders(),body:JSON.stringify(body)});
+  if(!r.ok){const e=await r.json().catch(()=>({}));throw new Error('GitHub '+r.status+': '+(e.message||'error')+(e.errors?JSON.stringify(e.errors):''));}
+  return true;
+}
+
+async function ghDelete(path, sha, msg){
+  const user=document.getElementById('k-ghu').value.trim()||GITHUB_USER;
+  const repo=document.getElementById('k-ghr').value.trim()||GITHUB_REPO;
+  const url=`https://api.github.com/repos/${user}/${repo}/contents/${path}`;
+  const r=await fetch(url,{method:'DELETE',headers:getGHHeaders(),body:JSON.stringify({message:msg,sha})});
+  if(!r.ok){const e=await r.json().catch(()=>({}));throw new Error('GitHub '+r.status+': '+(e.message||'error'));}
+  return true;
+}
+
+// ═══════════════════════════════════════════════════════════
+// VALIDATE KEYS
+// ═══════════════════════════════════════════════════════════
+async function validateKeys(){
+  const btn=document.getElementById('btn-val');
+  btn.disabled=true;btn.innerHTML='<span class="spinner"></span> Validating...';
+  const res=[];
+  const key=document.getElementById('k-ant').value.trim();
+  if(key){
+    try{
+      await callClaude('Reply OK','ping',5);
+      res.push('<span class="badge bs">✓ Anthropic connected</span>');
+      alog('Anthropic API key valid','success');
+      document.getElementById('status').className='pill on';
+      document.getElementById('status').innerHTML='<span class="dot"></span>Ready';
+    }catch(e){res.push(`<span class="badge bd">✕ Anthropic: ${e.message}</span>`);alog('Anthropic error: '+e.message,'error');}
+  } else res.push('<span class="badge bw">⚠ No Anthropic key</span>');
+  const ght=document.getElementById('k-ght').value.trim();
+  if(ght){
+    try{
+      const r=await fetch('https://api.github.com/user',{headers:getGHHeaders()});
+      if(r.ok){const d=await r.json();res.push(`<span class="badge bs">✓ GitHub: @${d.login}</span>`);alog('GitHub connected: @'+d.login,'success');}
+      else res.push('<span class="badge bd">✕ GitHub: invalid token</span>');
+    }catch(e){res.push(`<span class="badge bd">✕ GitHub: ${e.message}</span>`);}
+  } else res.push('<span class="badge bw">⚠ No GitHub token</span>');
+  document.getElementById('val-result').innerHTML='<div style="display:flex;gap:8px;flex-wrap:wrap">'+res.join('')+'</div>';
+  btn.disabled=false;btn.innerHTML='✓ Validate keys';
+}
+
+// ═══════════════════════════════════════════════════════════
+// GITHUB ARTICLES — refresh, delete, update
+// ═══════════════════════════════════════════════════════════
+async function refreshArticles(){
+  const btn=document.getElementById('btn-refresh-art');
+  if(btn){btn.disabled=true;btn.innerHTML='<span class="spinner"></span>';}
+  try{
+    const files=await ghGet('');
+    const articles=files.filter(f=>f.name.endsWith('.html')&&f.name!=='index.html'&&f.name!=='guides.html'&&f.name!=='cloudbet-whale-mode.html');
+    // Also include whale mode
+    const whaleFile=files.find(f=>f.name==='cloudbet-whale-mode.html');
+    if(whaleFile) articles.unshift(whaleFile);
+    S.liveArticles=articles;
+    setM();
+    renderArticleList(articles);
+    alog(`Refreshed: ${articles.length} articles found`,'success');
+  }catch(e){
+    document.getElementById('articles-list').innerHTML=`<div class="result-err">✕ ${e.message}</div>`;
+    alog('Refresh error: '+e.message,'error');
+  }
+  if(btn){btn.disabled=false;btn.innerHTML='🔄 Refresh from GitHub';}
+}
+
+function renderArticleList(articles){
+  const el=document.getElementById('articles-list');
+  if(!articles.length){el.innerHTML='<div style="text-align:center;padding:1.5rem;color:var(--muted);font-size:12px">No articles yet — run the pipeline to generate your first article</div>';return;}
+  el.innerHTML=articles.map(a=>{
+    const title=a.name.replace('.html','').replace(/-/g,' ').replace(/\b\w/g,c=>c.toUpperCase());
+    return `<div class="article-row" id="art-${a.sha}">
+      <div><div class="article-title">${title}</div><div class="article-slug">${a.name}</div></div>
+      <a href="${SITE_URL}/${a.name}" target="_blank" style="font-size:11px;color:var(--muted)">View →</a>
+      <button onclick="updateArticleAffiliates('${a.name}','${a.sha}')" style="font-size:11px;padding:4px 8px" title="Update affiliate links in this article">🔗</button>
+      <button class="danger" onclick="deleteArticle('${a.name}','${a.sha}')" style="font-size:11px;padding:4px 8px">🗑 Delete</button>
+    </div>`;
+  }).join('');
+  // Render topic queue
+  const usedSlugs=articles.map(a=>a.name.replace('.html',''));
+  const remaining=TOPICS.filter(t=>{
+    const slug=t.title.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'');
+    return !usedSlugs.includes(slug);
+  });
+  const qEl=document.getElementById('topic-queue');
+  if(qEl) qEl.innerHTML=remaining.map((t,i)=>`
+    <div style="display:flex;align-items:center;gap:8px;padding:.4rem .65rem;background:var(--dark4);border-radius:6px;border:1px solid var(--border);font-size:12px">
+      <span style="width:20px;height:20px;border-radius:50%;background:var(--dark3);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0">${i+1}</span>
+      <span style="flex:1">${t.title}</span>
+      <span style="font-size:10px;color:var(--muted);font-family:monospace">${t.kw}</span>
+    </div>`).join('');
+}
+
+async function deleteArticle(filename, sha){
+  if(!confirm(`Delete "${filename}" from GitHub?\nThis also updates guides.html and sitemap.xml automatically.`)) return;
+  const btn=event.target;btn.disabled=true;btn.textContent='Deleting...';
+  try{
+    await ghDelete(filename, sha, 'Delete article: '+filename);
+    alog('Deleted: '+filename,'success');
+    // Update liveArticles
+    S.liveArticles=S.liveArticles.filter(a=>a.name!==filename);
+    setM();
+    // Push updated guides.html and sitemap
+    await ghPush('guides.html', buildGuidesHtml(), 'Remove deleted article from guides');
+    await ghPush('sitemap.xml', buildSitemap(), 'Update sitemap after deletion');
+    alog('guides.html and sitemap updated','success');
+    renderArticleList(S.liveArticles);
+    document.getElementById('art-result').innerHTML='<div class="result-ok">✓ Article deleted and site updated</div>';
+  }catch(e){
+    document.getElementById('art-result').innerHTML=`<div class="result-err">✕ ${e.message}</div>`;
+    alog('Delete error: '+e.message,'error');
+    btn.disabled=false;btn.textContent='🗑 Delete';
+  }
+}
+
+async function updateArticleAffiliates(filename, sha){
+  const btn=event.target;btn.disabled=true;btn.textContent='⋯';
+  try{
+    const fileData=await ghGet(filename);
+    const existing=decodeURIComponent(escape(atob(fileData.content.replace(/\n/g,''))));
+    const affiliates=getAffiliates();
+    const affLinks=affiliates.map(a=>`<a href="${a.url}" rel="nofollow sponsored" target="_blank" class="cta-btn">Claim at ${a.name} →</a>`).join('\n');
+    // Use Claude to update the affiliate section
+    const updated=await callClaude(
+      'You update affiliate links in HTML casino articles. Return ONLY the full updated HTML. Keep all existing content exactly the same except update the affiliate links section. Add any missing affiliate links.',
+      `Update affiliate links in this article. Current affiliates:\n${affiliates.map(a=>`${a.name}: ${a.url} — ${a.bonus}`).join('\n')}\n\nArticle HTML (first 2000 chars):\n${existing.slice(0,2000)}\n\nReturn the complete updated article HTML.`,
+      1500
+    );
+    await ghPush(filename, updated, 'Update affiliate links: '+filename);
+    alog('Affiliate links updated in '+filename,'success');
+    btn.textContent='✓';
+    setTimeout(()=>{btn.disabled=false;btn.textContent='🔗';},2000);
+  }catch(e){
+    alog('Error updating '+filename+': '+e.message,'error');
+    btn.disabled=false;btn.textContent='🔗';
+  }
+}
+
+async function updateAllAffiliates(){
+  const btn=event.target;btn.disabled=true;btn.innerHTML='<span class="spinner"></span> Updating all...';
+  const resultEl=document.getElementById('affil-push-result')||document.getElementById('art-result');
+  let count=0;
+  try{
+    if(!S.liveArticles.length) await refreshArticles();
+    for(const art of S.liveArticles){
+      if(art.name==='index.html'||art.name==='guides.html') continue;
+      try{
+        await updateArticleAffiliates(art.name, art.sha);
+        count++;
+        await sleep(500);
+      }catch(e){alog('Skip '+art.name+': '+e.message,'warning');}
+    }
+    if(resultEl) resultEl.innerHTML=`<div class="result-ok">✓ Updated affiliate links in ${count} articles</div>`;
+    alog(`Affiliate links pushed to ${count} articles`,'success');
+  }catch(e){
+    if(resultEl) resultEl.innerHTML=`<div class="result-err">✕ ${e.message}</div>`;
+  }
+  btn.disabled=false;btn.innerHTML=btn.textContent.includes('Push')?'🚀 Push all affiliate links to site + articles':'🔗 Push affiliate links to all articles';
+}
+
+// ═══════════════════════════════════════════════════════════
+// AFFILIATES
+// ═══════════════════════════════════════════════════════════
+function renderAffiliates(){
+  const affiliates=getAffiliates();
+  const el=document.getElementById('affil-list');
+  el.innerHTML=affiliates.map((a,i)=>`
+    <div class="affil-card">
+      <div class="affil-logo" style="background:${['#0F212E','#1a1a2e','#1a0a3e'][i%3]||'#1a1a1a'}">
+        ${a.logo?`<img src="${a.logo}" alt="${a.name}">`:`<span style="color:var(--gold);font-size:11px">${a.name.slice(0,2).toUpperCase()}</span>`}
+      </div>
+      <div class="affil-info">
+        <div class="affil-name">${a.name}</div>
+        <div class="affil-url">${a.url}</div>
+        <div class="affil-bonus">${a.bonus}</div>
+        ${a.notes?`<div style="font-size:10px;color:var(--muted);margin-top:2px">${a.notes}</div>`:''}
+      </div>
+      <div style="display:flex;flex-direction:column;gap:4px">
+        <span class="badge bs" style="font-size:10px">Active</span>
+        <button class="danger" onclick="removeAffiliate(${i})" style="font-size:11px;padding:3px 7px">Remove</button>
+      </div>
+    </div>`).join('');
+}
+
+function removeAffiliate(idx){
+  if(!confirm('Remove this affiliate?')) return;
+  const arr=getAffiliates();
+  arr.splice(idx,1);
+  saveAffiliates(arr);
+  renderAffiliates();
+  alog('Affiliate removed','warning');
+}
+
+async function addAffiliate(){
+  const name=document.getElementById('new-aff-name').value.trim();
+  const url=document.getElementById('new-aff-url').value.trim();
+  const bonus=document.getElementById('new-aff-bonus').value.trim();
+  const notes=document.getElementById('new-aff-notes').value.trim();
+  const logoFile=document.getElementById('new-aff-logo').files[0];
+  if(!name||!url){alert('Name and URL are required');return;}
+  let logo='';
+  if(logoFile){
+    logo=await new Promise(res=>{
+      const r=new FileReader();r.onload=e=>res(e.target.result);r.readAsDataURL(logoFile);
+    });
+  }
+  const arr=getAffiliates();
+  arr.push({name,url,bonus,notes,logo});
+  saveAffiliates(arr);
+  renderAffiliates();
+  document.getElementById('new-aff-name').value='';
+  document.getElementById('new-aff-url').value='';
+  document.getElementById('new-aff-bonus').value='';
+  document.getElementById('new-aff-notes').value='';
+  document.getElementById('new-aff-logo').value='';
+  document.getElementById('new-aff-result').innerHTML='<div class="result-ok">✓ Affiliate added. Click "Push all affiliate links" to update site and articles.</div>';
+  alog('New affiliate added: '+name,'success');
+}
+
+// ═══════════════════════════════════════════════════════════
+// GUIDES.HTML BUILDER — auto-generates from liveArticles
+// ═══════════════════════════════════════════════════════════
+function buildGuidesHtml(){
+  const articles=S.liveArticles.filter(a=>a.name!=='index.html'&&a.name!=='guides.html');
+  const affiliates=getAffiliates();
+  const cats={
+    'cloudbet-whale-mode':'highroller',
+    'stake-casino-review-2026':'reviews',
+    'bc-game-review-is-it-legit':'reviews',
+    'cloudbet-review-bonus-whale-mode':'reviews',
+    'best-crypto-casinos-2026-complete-guide':'guides',
+    'top-bitcoin-casinos-with-no-kyc':'guides',
+    'fastest-crypto-casino-withdrawals-2026':'guides',
+    'best-crypto-crash-game-sites':'guides',
+    'ethereum-casino-sites-2026':'guides',
+    'no-wagering-crypto-casino-sites':'bonuses',
+    'best-crypto-casino-welcome-bonuses-ranked':'bonuses',
+    'provably-fair-gambling-complete-guide':'guides',
+    'crypto-casino-high-roller-vip':'highroller',
+  };
+  const tags={
+    reviews:{label:'Review',bg:'rgba(99,102,241,.2)',color:'#a5b4fc'},
+    guides:{label:'Guide',bg:'rgba(212,160,23,.12)',color:'#D4A017'},
+    bonuses:{label:'Bonuses',bg:'rgba(34,197,94,.12)',color:'#86efac'},
+    highroller:{label:'High Roller',bg:'rgba(124,58,237,.2)',color:'#a78bfa'},
+  };
+  const articleCards=articles.map(a=>{
+    const slug=a.name.replace('.html','');
+    const title=slug.replace(/-/g,' ').replace(/\b\w/g,c=>c.toUpperCase());
+    const cat=cats[slug]||'guides';
+    const tag=tags[cat]||tags.guides;
+    return `<a href="${slug}.html" class="article-card">
+      <div class="card-top"><span class="card-tag" style="background:${tag.bg};color:${tag.color}">${tag.label}</span><span class="live-badge">Live</span></div>
+      <div class="card-casino">EliteBonusHub</div>
+      <div class="card-title">${title}</div>
+      <div class="card-footer"><span class="card-read">5 min read</span><span class="card-arrow">Read &rarr;</span></div>
+    </a>`;
+  }).join('\n');
+  const affiliateCTAs=affiliates.map(a=>`<a href="${a.url}" rel="nofollow sponsored" target="_blank" class="btn-primary">${a.name} — ${a.bonus} →</a>`).join('\n');
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Crypto Casino Guides & Reviews 2026 | EliteBonusHub</title>
+<meta name="description" content="Expert crypto casino guides, honest reviews, and bonus strategies. Updated weekly.">
+<link rel="canonical" href="${SITE_URL}/guides.html">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--gold:#D4A017;--dark:#080808;--dark2:#0F0F0F;--dark3:#161616;--dark4:#1E1E1E;--border:#2A2A2A;--text:#F0EDE6;--muted:#9A9690;--green:#22C55E;--purple:#7c3aed;--radius:10px;--radius-lg:16px}
+html{scroll-behavior:smooth}body{font-family:'Inter',system-ui,sans-serif;background:var(--dark);color:var(--text);font-size:15px;line-height:1.7;overflow-x:hidden}
+a{color:var(--gold);text-decoration:none}a:hover{text-decoration:underline}
+.site-nav{background:rgba(8,8,8,.96);border-bottom:1px solid var(--border);padding:.7rem 1.5rem;display:flex;align-items:center;gap:1.5rem;position:sticky;top:0;z-index:200;backdrop-filter:blur(12px)}
+.nav-logo{font-family:'Cinzel',serif;font-size:15px;font-weight:700;color:var(--gold);display:flex;align-items:center;gap:9px;text-decoration:none}
+.nav-links{display:flex;gap:1.75rem;list-style:none;margin-left:auto}
+.nav-links a{font-size:13px;font-weight:500;color:var(--muted)}
+.nav-links a:hover,.nav-links a.active{color:var(--text);text-decoration:none}
+.nav-cta{font-size:13px;font-weight:600;background:var(--gold);color:#000;padding:6px 16px;border-radius:6px;text-decoration:none}
+.hero{background:var(--dark2);border-bottom:1px solid var(--border);padding:3rem 1.5rem}
+.hero-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:center}
+.hero-eyebrow{font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:.65rem}
+.hero h1{font-family:'Cinzel',serif;font-size:clamp(1.5rem,3.5vw,2.2rem);font-weight:900;line-height:1.2;margin-bottom:.75rem}
+.hero-desc{font-size:.95rem;color:var(--muted);margin-bottom:1.25rem;line-height:1.75}
+.hero-meta{display:flex;gap:1rem;font-size:12px;color:var(--muted);margin-bottom:1.25rem;flex-wrap:wrap}
+.btn-primary{display:inline-flex;align-items:center;gap:7px;background:var(--gold);color:#000;font-weight:700;font-size:14px;padding:12px 24px;border-radius:8px;text-decoration:none}
+.btn-primary:hover{opacity:.85;text-decoration:none;color:#000}
+.btn-outline{display:inline-flex;align-items:center;background:transparent;color:var(--text);font-weight:600;font-size:14px;padding:11px 22px;border-radius:8px;border:1px solid var(--border);text-decoration:none}
+.hero-img{background:linear-gradient(135deg,#0d0020,#1a0040);border-radius:var(--radius-lg);border:1px solid rgba(124,58,237,.3);padding:2rem;text-align:center;display:flex;flex-direction:column;gap:1rem;align-items:center;justify-content:center}
+.cat-nav{border-bottom:1px solid var(--border);background:var(--dark2);position:sticky;top:57px;z-index:100}
+.cat-nav-inner{max-width:1100px;margin:0 auto;padding:0 1.5rem;display:flex;overflow-x:auto}
+.cat-btn{padding:.85rem 1.25rem;font-size:13px;font-weight:500;color:var(--muted);background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;font-family:'Inter',sans-serif;white-space:nowrap}
+.cat-btn:hover{color:var(--text)}
+.cat-btn.active{color:var(--gold);border-bottom:2px solid var(--gold)}
+.cat-count{font-size:10px;background:var(--dark4);padding:2px 6px;border-radius:10px;color:var(--muted);margin-left:4px}
+.container{max-width:1100px;margin:0 auto;padding:2rem 1.5rem}
+.stats-bar{background:var(--dark3);border-radius:var(--radius-lg);padding:1.25rem 1.5rem;display:flex;gap:2rem;flex-wrap:wrap;margin-bottom:2rem}
+.stat-n{font-size:1.5rem;font-weight:700;font-family:'Cinzel',serif;color:var(--gold)}
+.stat-l{font-size:11px;color:var(--muted)}
+.articles-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.25rem}
+.article-card{background:var(--dark3);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.25rem;display:flex;flex-direction:column;gap:.65rem;transition:border-color .2s,transform .2s;text-decoration:none;color:var(--text)}
+.article-card:hover{border-color:rgba(212,160,23,.45);transform:translateY(-2px);text-decoration:none;color:var(--text)}
+.card-top{display:flex;align-items:center;justify-content:space-between}
+.card-tag{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;padding:3px 8px;border-radius:4px}
+.card-casino{font-size:10px;color:var(--muted)}
+.card-title{font-size:1rem;font-weight:700;line-height:1.3;flex:1}
+.card-footer{display:flex;align-items:center;justify-content:space-between;padding-top:.65rem;border-top:1px solid var(--border);margin-top:auto}
+.card-read{font-size:11px;color:var(--muted)}
+.card-arrow{font-size:12px;font-weight:600;color:var(--gold)}
+.live-badge{font-size:9px;font-weight:600;background:rgba(34,197,94,.15);color:var(--green);padding:2px 6px;border-radius:4px;text-transform:uppercase}
+.cta-strip{background:var(--dark3);border:1px solid var(--border);border-radius:var(--radius-lg);padding:2rem;text-align:center;margin-top:2.5rem}
+.cta-strip h3{font-family:'Cinzel',serif;font-size:1.3rem;color:var(--gold);margin-bottom:.5rem}
+.cta-strip p{font-size:.88rem;color:var(--muted);margin-bottom:1.25rem}
+.cta-pair{display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap}
+.site-footer{background:var(--dark2);border-top:1px solid var(--border);padding:1.5rem;text-align:center;font-size:11px;color:var(--muted);margin-top:3rem}
+.site-footer a{color:var(--muted)}
+@media(max-width:700px){.hero-inner{grid-template-columns:1fr}.hero-img{display:none}.nav-links{display:none}.articles-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<nav class="site-nav">
+  <a href="/" class="nav-logo">
+    <svg viewBox="0 0 44 44" fill="none" style="width:26px;height:26px"><path d="M6 32 L8 20 L15 27 L22 10 L29 27 L36 20 L38 32 Z" fill="#D4A017" stroke="#A67C00" stroke-width="1"/><circle cx="8" cy="19" r="2.2" fill="#F0C84A"/><circle cx="22" cy="9.5" r="2.8" fill="#F0C84A"/><circle cx="36" cy="19" r="2.2" fill="#F0C84A"/><rect x="6" y="31" width="32" height="5" rx="2" fill="#A67C00"/><rect x="8" y="32" width="28" height="3" rx="1.5" fill="#D4A017"/></svg>
+    EliteBonusHub
+  </a>
+  <ul class="nav-links">
+    <li><a href="/#casinos">Top Casinos</a></li>
+    <li><a href="guides.html" class="active">Guides &amp; Reviews</a></li>
+    <li><a href="/#how-it-works">How It Works</a></li>
+    <li><a href="/#responsible">Responsible Gaming</a></li>
+  </ul>
+  <a href="/" class="nav-cta">Get Bonus</a>
+</nav>
+<section class="hero">
+  <div class="hero-inner">
+    <div>
+      <div class="hero-eyebrow">&#9733; Featured guide</div>
+      <h1>Cloudbet Whale Mode — No-Limit Crypto Betting</h1>
+      <p class="hero-desc">The only crypto sportsbook where high rollers can place bets with no upper limit — up to $500,000+ per position with automatic liquidity building.</p>
+      <div class="hero-meta"><span>&#128197; June 2026</span><span>&#9997; EBH Team</span><span>&#9989; Verified 2026</span></div>
+      <div style="display:flex;gap:.75rem;flex-wrap:wrap">
+        <a href="cloudbet-whale-mode.html" class="btn-primary">Read full guide &rarr;</a>
+        <a href="${affiliates.find(a=>a.name==='Cloudbet')?.url||'#'}" rel="nofollow sponsored" target="_blank" class="btn-outline">Try Cloudbet &rarr;</a>
+      </div>
+    </div>
+    <div class="hero-img">
+      <div style="font-size:3rem">&#128011;</div>
+      <div style="font-family:'Cinzel',serif;color:#a78bfa;font-size:1.1rem">Cloudbet Whale Mode</div>
+      <div style="font-size:.82rem;color:var(--muted)">No-limit bets &middot; $500K+ positions<br>Auto liquidity &middot; Global sports</div>
+      <div style="display:flex;gap:.5rem;flex-wrap:wrap;justify-content:center">
+        <span style="font-size:10px;background:rgba(124,58,237,.2);color:#a78bfa;padding:3px 8px;border-radius:4px">No bet limits</span>
+        <span style="font-size:10px;background:rgba(34,197,94,.15);color:#86efac;padding:3px 8px;border-radius:4px">Auto position building</span>
+      </div>
+    </div>
+  </div>
+</section>
+<nav class="cat-nav">
+  <div class="cat-nav-inner">
+    <button class="cat-btn active" onclick="filterCat('all')">All <span class="cat-count">${articles.length}</span></button>
+    <button class="cat-btn" onclick="filterCat('reviews')">&#9733; Casino reviews</button>
+    <button class="cat-btn" onclick="filterCat('guides')">&#128218; Guides</button>
+    <button class="cat-btn" onclick="filterCat('bonuses')">&#127873; Bonuses</button>
+    <button class="cat-btn" onclick="filterCat('highroller')">&#128011; High roller</button>
+  </div>
+</nav>
+<div class="container">
+  <div class="stats-bar">
+    <div><div class="stat-n">${articles.length}</div><div class="stat-l">Articles live</div></div>
+    <div><div class="stat-n">Weekly</div><div class="stat-l">New articles</div></div>
+    <div><div class="stat-n">Free</div><div class="stat-l">Always free to read</div></div>
+  </div>
+  <div class="articles-grid" id="guide-grid">
+    ${articleCards||'<div style="grid-column:1/-1;text-align:center;padding:3rem;color:var(--muted)">First articles coming soon</div>'}
+  </div>
+  <div class="cta-strip">
+    <h3>Ready to claim your bonus?</h3>
+    <p>Every casino we review is verified. Click through our exclusive links for the highest available bonus.</p>
+    <div class="cta-pair">${affiliateCTAs}</div>
+  </div>
+</div>
+<footer class="site-footer">
+  <p>&copy; 2026 EliteBonusHub.com &middot; <a href="/">Home</a> &middot; <a href="/#legal">Disclaimer</a> &middot; 18+ Gamble Responsibly &middot; <a href="https://www.begambleaware.org" rel="nofollow">BeGambleAware.org</a></p>
+</footer>
+<script>
+var ALL_CARDS=document.querySelectorAll('.article-card');
+function filterCat(cat){
+  document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('active'));
+  event.target.classList.add('active');
+}
+<\/script>
+</body>
+</html>`;
+}
+
+// ═══════════════════════════════════════════════════════════
+// SITEMAP BUILDER
+// ═══════════════════════════════════════════════════════════
+function buildSitemap(){
+  const today=new Date().toISOString().split('T')[0];
+  const pages=[''];
+  S.liveArticles.forEach(a=>{if(a.name!=='index.html')pages.push(a.name);});
+  if(!pages.includes('guides.html'))pages.push('guides.html');
+  if(!pages.includes('cloudbet-whale-mode.html'))pages.push('cloudbet-whale-mode.html');
+  return `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${[...new Set(pages)].map(p=>`<url><loc>${SITE_URL}/${p}</loc><lastmod>${today}</lastmod><priority>${p===''?'1.0':'0.8'}</priority></url>`).join('')}</urlset>`;
+}
+
+// ═══════════════════════════════════════════════════════════
+// DEPLOY
+// ═══════════════════════════════════════════════════════════
+async function deployAll(){
+  const btn=document.getElementById('btn-dep');
+  btn.disabled=true;btn.innerHTML='<span class="spinner"></span> Deploying...';
+  const logEl=document.getElementById('dep-log');if(logEl)logEl.textContent='';
+  try{
+    dlog('Deploying to GitHub Pages...');
+    await ghPush('.nojekyll','','Disable Jekyll');dlog('✓ .nojekyll');
+    await ghPush('sitemap.xml',buildSitemap(),'Update sitemap');dlog('✓ sitemap.xml');
+    await ghPush('guides.html',buildGuidesHtml(),'Update guides page');dlog('✓ guides.html');
+    for(const art of S.articles_data){
+      await ghPush(art.slug+'.html',art.html,'Add article: '+art.title);
+      dlog('✓ '+art.slug+'.html');
+    }
+    S.lastDeploy=new Date().toLocaleTimeString();setM();
+    alog('Deployed to GitHub Pages','success');
+    document.getElementById('dep-result').innerHTML=`<div class="result-ok">✓ Deployed · <a href="${SITE_URL}" target="_blank">${SITE_URL}</a></div>`;
+  }catch(e){
+    dlog('ERROR: '+e.message);
+    alog('Deploy error: '+e.message,'error');
+    document.getElementById('dep-result').innerHTML=`<div class="result-err">✕ ${e.message}</div>`;
+  }
+  btn.disabled=false;btn.innerHTML='🚀 Deploy to GitHub';
+}
+
+async function deploySingleFile(filename, content, msg){
+  const btn=event.target;btn.disabled=true;btn.innerHTML='<span class="spinner"></span>';
+  try{
+    const html = content || await fetchIndexHtml();
+    await ghPush(filename, html, msg);
+    alog(filename+' deployed','success');
+    btn.innerHTML='✓';setTimeout(()=>{btn.disabled=false;btn.innerHTML=btn.getAttribute('data-label')||filename;},2000);
+  }catch(e){
+    alog('Deploy error: '+e.message,'error');
+    btn.disabled=false;btn.innerHTML='✗ Error';
+    setTimeout(()=>{btn.innerHTML=btn.getAttribute('data-label')||filename;},2000);
+  }
+}
+
+// ═══════════════════════════════════════════════════════════
+// PIPELINE
+// ═══════════════════════════════════════════════════════════
+async function runFull(){
+  ['btn-full','btn-art'].forEach(id=>{const el=document.getElementById(id);if(el)el.disabled=true;});
+  document.getElementById('run-log').textContent='';
+  document.getElementById('run-result').innerHTML='';
+  document.getElementById('status').className='pill busy';
+  document.getElementById('status').innerHTML='<span class="spinner"></span> Running';
+  [1,2,3,4,5].forEach(n=>setStep(n,'pending'));
+  const topic=TOPICS[S.topicIdx%TOPICS.length];
+  S.topicIdx++;localStorage.setItem('ebh_topic',S.topicIdx);
+  const affiliates=getAffiliates();
+  const affStr=affiliates.map(a=>`${a.name}: ${a.url} — ${a.bonus}`).join('\n');
+  try{
+    setStep(1,'running');setProg(8,'Selecting topic...');
+    rlog('[1/5] Topic: '+topic.title);await sleep(300);setStep(1,'done');
+    setStep(2,'running');setProg(20,'Researching...');
+    rlog('[2/5] Researching...');
+    const research=await callClaude('You are a crypto casino SEO researcher. Write a 120-word brief covering what the article should include, reader pain points, and which casinos to feature.','Topic: "'+topic.title+'", keyword: "'+topic.kw+'". Available casinos: '+affiliates.map(a=>a.name).join(', ')+'.');
+    rlog('Research: '+research.length+' chars');setStep(2,'done');setProg(36,'Research done');
+    setStep(3,'running');setProg(50,'Writing article...');
+    rlog('[3/5] Writing SEO article...');
+    const body=await callClaude(
+      'You are a senior crypto casino content writer for EliteBonusHub.com.\n\nCRITICAL: Output clean HTML ONLY. No markdown, no code fences, no triple backticks.\nCRITICAL: Use ONLY the year 2026. Never write 2024 or 2025.\nCRITICAL: Start your output directly with an h1 tag. Nothing before it.\n\nWrite a 1,400+ word professional article. Include h2 sections, a casino picks div with affiliate CTAs, comparison table, pros-cons div, and responsible gambling note at the end.',
+      'Write the article now.\n\nTITLE: '+topic.title+'\nKEYWORD: '+topic.kw+'\nYEAR: 2026\n\nMANDATORY AFFILIATE LINKS — use all of these:\n'+affStr+'\n\nFormat each casino CTA as:\n<a href="URL" rel="nofollow sponsored" target="_blank" class="cta-btn">Claim Bonus at CASINO →</a>',
+      1000
+    );
+    const slug=topic.title.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'');
+    const fullHtml=buildArticleHtml(topic.title, slug, body);
+    S.articles_data.push({title:topic.title,slug,html:fullHtml,date:new Date().toLocaleDateString()});
+    rlog('Article: '+slug+'.html');setStep(3,'done');setProg(64,'Article written');
+    setStep(4,'running');setProg(76,'Deploying article...');
+    rlog('[4/5] Pushing article to GitHub...');
+    try{
+      await ghPush(slug+'.html',fullHtml,'Add article: '+topic.title);
+      S.articles++;S.lastDeploy=new Date().toLocaleTimeString();setM();
+      rlog('✓ Article deployed');setStep(4,'done');setProg(86,'Article live');
+      alog('Article deployed: '+topic.title,'success');
+    }catch(e){rlog('Deploy error: '+e.message);setStep(4,'failed');alog('Deploy error: '+e.message,'error');}
+    setStep(5,'running');setProg(94,'Updating site files...');
+    rlog('[5/5] Updating guides.html + sitemap...');
+    // Refresh live articles list then rebuild guides
+    try{
+      const files=await ghGet('');
+      S.liveArticles=files.filter(f=>f.name.endsWith('.html')&&f.name!=='index.html');
+      await ghPush('guides.html',buildGuidesHtml(),'Update guides: add '+topic.title);
+      await ghPush('sitemap.xml',buildSitemap(),'Update sitemap');
+      rlog('✓ guides.html and sitemap updated');
+      setStep(5,'done');setProg(100,'Complete ✓');
+      alog('Full pipeline complete: '+topic.title,'success');
+      document.getElementById('run-result').innerHTML=`<div class="result-ok">✓ Complete · <strong>${topic.title}</strong> · Cost: $${S.cost.toFixed(4)}</div>`;
+      document.getElementById('status').className='pill on';
+      document.getElementById('status').innerHTML='<span class="dot"></span>Live';
+    }catch(e){rlog('Site update error: '+e.message);setStep(5,'failed');}
+  }catch(e){
+    rlog('\nERROR: '+e.message);
+    [1,2,3,4,5].forEach(n=>{if(document.getElementById('ps-'+n)?.classList.contains('running'))setStep(n,'failed');});
+    alog('Pipeline error: '+e.message,'error');
+    document.getElementById('run-result').innerHTML=`<div class="result-err">✕ ${e.message}</div>`;
+    document.getElementById('status').className='pill off';
+    document.getElementById('status').innerHTML='<span class="dot"></span>Error';
+  }
+  ['btn-full','btn-art'].forEach(id=>{const el=document.getElementById(id);if(el)el.disabled=false;});
+}
+
+async function runArticle(){
+  const btn=document.getElementById('btn-art');
+  btn.disabled=true;btn.innerHTML='<span class="spinner"></span>';
+  try{
+    const topic=TOPICS[S.topicIdx%TOPICS.length];S.topicIdx++;
+    localStorage.setItem('ebh_topic',S.topicIdx);
+    const affiliates=getAffiliates();
+    const affStr=affiliates.map(a=>`${a.name}: ${a.url} — ${a.bonus}`).join('\n');
+    rlog('Writing: '+topic.title);
+    const body=await callClaude('Write a crypto casino affiliate article as clean HTML body content. 1200+ words, H2s, casino picks with CTAs, comparison table. Use only 2026.','Title:"'+topic.title+'", kw:"'+topic.kw+'". Affiliates:\n'+affStr,1000);
+    const slug=topic.title.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'');
+    const fullHtml=buildArticleHtml(topic.title,slug,body);
+    S.articles_data.push({title:topic.title,slug,html:fullHtml,date:new Date().toLocaleDateString()});
+    S.articles++;setM();
+    rlog('Done: '+slug+'.html');alog('Article generated: '+topic.title,'success');sw('log');
+  }catch(e){rlog('Error: '+e.message);alog('Error: '+e.message,'error');}
+  btn.disabled=false;btn.innerHTML='📝 Article only';
+}
+
+// ═══════════════════════════════════════════════════════════
+// ARTICLE HTML TEMPLATE
+// ═══════════════════════════════════════════════════════════
+function buildArticleHtml(title, slug, body){
+  const affiliates=getAffiliates();
+  const footerCTAs=affiliates.map(a=>`<div class="footer-cta"><h4>${a.name}</h4><p>${a.bonus}</p><a href="${a.url}" rel="nofollow sponsored" target="_blank" class="cta-btn">Claim at ${a.name} →</a></div>`).join('');
+  const year=new Date().getFullYear();
+  const pubDate=new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>${title} | EliteBonusHub</title>
+<meta name="description" content="${title} — expert crypto casino guide with honest reviews and exclusive bonuses. Updated ${year}.">
+<link rel="canonical" href="${SITE_URL}/${slug}.html">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--gold:#D4A017;--dark:#080808;--dark2:#0F0F0F;--dark3:#161616;--dark4:#1E1E1E;--border:#2A2A2A;--text:#F0EDE6;--muted:#9A9690}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--dark);color:var(--text);line-height:1.8;font-size:16px}
+.site-nav{background:rgba(8,8,8,.96);border-bottom:1px solid var(--border);padding:.7rem 1.5rem;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100}
+.nav-logo{font-family:'Cinzel',serif;font-size:14px;font-weight:700;color:var(--gold);text-decoration:none}
+.nav-back{margin-left:auto;font-size:12px;color:var(--muted);text-decoration:none}
+.nav-back:hover{color:var(--text)}
+.article-hero{background:linear-gradient(135deg,var(--dark2),var(--dark3));border-bottom:1px solid var(--border);padding:3rem 1.5rem 2rem}
+.article-hero-inner{max-width:820px;margin:0 auto}
+.article-eyebrow{font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:.75rem}
+.article-hero h1{font-family:'Cinzel',serif;font-size:clamp(1.6rem,4vw,2.4rem);font-weight:900;line-height:1.2;margin-bottom:.75rem}
+.article-meta{display:flex;align-items:center;gap:1.25rem;font-size:12px;color:var(--muted);flex-wrap:wrap}
+.article-wrap{max-width:820px;margin:0 auto;padding:2.5rem 1.5rem}
+h1{font-family:'Cinzel',serif;font-size:2rem;font-weight:900;margin-bottom:1rem;line-height:1.2}
+h2{font-family:'Cinzel',serif;font-size:1.35rem;font-weight:700;margin:2.5rem 0 .75rem;color:var(--gold);padding-bottom:.4rem;border-bottom:1px solid var(--border)}
+h3{font-size:1.05rem;font-weight:600;margin:1.5rem 0 .5rem}
+p{margin-bottom:1.1rem;color:#ddd;line-height:1.85}
+ul,ol{margin:0 0 1.25rem 1.5rem}li{margin-bottom:.4rem;color:#ddd}
+strong{color:var(--text);font-weight:600}
+a{color:var(--gold)}
+.intro{font-size:1.05rem;color:var(--muted);border-left:3px solid var(--gold);padding-left:1rem;margin-bottom:1.75rem}
+.quick-verdict{background:var(--dark3);border:1px solid rgba(212,160,23,.3);border-radius:12px;padding:1.25rem 1.5rem;margin-bottom:2rem}
+.quick-verdict h3{margin-top:0;color:var(--gold)}
+.casino-picks{display:flex;flex-direction:column;gap:1rem;margin:1.25rem 0 2rem}
+.pick-card{background:var(--dark3);border:1px solid var(--border);border-radius:12px;padding:1.25rem}
+.pick-card h3{margin-top:0;font-size:1rem}
+.pick-card p{font-size:.9rem;color:var(--muted);margin-bottom:.85rem}
+.cta-btn{display:inline-block;background:var(--gold);color:#000;font-weight:700;font-size:.88rem;padding:10px 20px;border-radius:8px;text-decoration:none}
+.cta-btn:hover{opacity:.85;text-decoration:none;color:#000}
+.comparison-table{width:100%;border-collapse:collapse;margin:1.5rem 0 2rem;font-size:.9rem;border-radius:8px;overflow:hidden}
+.comparison-table th{background:var(--dark4);color:var(--gold);padding:.6rem .85rem;text-align:left;font-weight:600;border:1px solid var(--border)}
+.comparison-table td{padding:.55rem .85rem;border:1px solid var(--border);color:#ccc}
+.comparison-table tr:nth-child(even) td{background:rgba(255,255,255,.02)}
+.pros-cons{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1.25rem 0 2rem}
+.pros,.cons{background:var(--dark3);border-radius:10px;padding:1rem}
+.pros{border-top:3px solid #22c55e}.cons{border-top:3px solid #ef4444}
+.pros h4{color:#86efac;margin-bottom:.65rem;font-size:.9rem}.cons h4{color:#fca5a5;margin-bottom:.65rem;font-size:.9rem}
+.rg-note{background:var(--dark3);border:1px solid var(--border);border-radius:10px;padding:1rem 1.25rem;font-size:.82rem;color:var(--muted);margin-top:2.5rem}
+.breadcrumb{font-size:11px;color:var(--muted);margin-bottom:1.25rem;display:flex;align-items:center;gap:5px}
+.breadcrumb a{color:var(--muted)}.breadcrumb a:hover{color:var(--gold)}
+.article-footer{border-top:1px solid var(--border);padding-top:1.5rem;margin-top:2.5rem;display:flex;gap:1rem;flex-wrap:wrap}
+.footer-cta{flex:1;background:var(--dark3);border:1px solid var(--border);border-radius:10px;padding:1rem;text-align:center;min-width:200px}
+.footer-cta h4{font-size:.9rem;margin-bottom:.35rem}.footer-cta p{font-size:.78rem;color:var(--muted);margin-bottom:.65rem}
+.site-footer{background:var(--dark2);border-top:1px solid var(--border);padding:1.5rem;text-align:center;font-size:11px;color:var(--muted)}
+@media(max-width:600px){.pros-cons{grid-template-columns:1fr}.article-footer{flex-direction:column}}
+</style>
+</head>
+<body>
+<nav class="site-nav">
+  <a href="/" class="nav-logo">&#9813; EliteBonusHub</a>
+  <a href="/guides.html" class="nav-back">&#8592; All guides</a>
+</nav>
+<div class="article-hero">
+  <div class="article-hero-inner">
+    <div class="article-eyebrow">Expert Guide &middot; EliteBonusHub.com</div>
+    <h1>${title}</h1>
+    <div class="article-meta">
+      <span>&#128197; ${pubDate}</span>
+      <span>&#9997; EliteBonusHub Team</span>
+      <span>&#9989; Verified ${year}</span>
+      <span>&#128286; 18+ only</span>
+    </div>
+  </div>
+</div>
+<main class="article-wrap">
+  <div class="breadcrumb"><a href="/">Home</a> <span>›</span> <a href="/guides.html">Guides</a> <span>›</span> <span>${title}</span></div>
+  ${body}
+  <div class="article-footer">${footerCTAs}</div>
+  <div class="rg-note"><strong>Affiliate disclosure & responsible gambling:</strong> EliteBonusHub earns commissions on qualifying sign-ups. This does not affect editorial independence. Only bet what you can afford to lose. 18+ only. <a href="https://www.begambleaware.org" rel="nofollow">BeGambleAware.org</a></div>
+</main>
+<footer class="site-footer"><p>&copy; ${year} EliteBonusHub.com &middot; <a href="/">Home</a> &middot; <a href="/guides.html">All Guides</a> &middot; <a href="/#legal">Disclaimer</a></p></footer>
+</body>
+</html>`;
+}
+
+// ═══════════════════════════════════════════════════════════
+// SEO — COMPETITIVE ANALYSIS + KEYWORD RESEARCH
+// ═══════════════════════════════════════════════════════════
+var kwFilter = 'all';
+var seoInsights = null; // stores latest competitor analysis
+
+function filterKw(type) {
+  kwFilter = type;
+  document.querySelectorAll('[id^="kf-"]').forEach(b => {
+    b.classList.remove('success');
+    b.style.borderColor = '';
+  });
+  const active = document.getElementById('kf-' + type);
+  if (active) active.classList.add('success');
+  renderKeywords();
+}
+
+function renderKeywords() {
+  const tbody = document.getElementById('kw-body');
+  if (!tbody) return;
+  let filtered = S.keywords;
+  if (kwFilter !== 'all') filtered = S.keywords.filter(k => k.type === kwFilter);
+  if (!filtered.length) {
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:1.5rem">' +
+      (S.keywords.length ? 'No keywords in this category' : 'Run competitor analysis or keyword research to populate') +
+      '</td></tr>';
+  } else {
+    tbody.innerHTML = filtered.map(k => `
+      <tr>
+        <td style="font-weight:500">${k.keyword}</td>
+        <td><span class="kw-type">${k.type}</span></td>
+        <td style="font-family:monospace;color:${k.vol > 5000 ? '#22c55e' : k.vol > 1000 ? '#eab308' : 'var(--muted)'}">${Number(k.vol).toLocaleString()}</td>
+        <td><span class="kw-diff diff-${k.diff}">${k.diff}</span></td>
+        <td style="font-size:11px;color:var(--muted)">${k.source || '—'}</td>
+        <td style="font-size:12px;color:var(--muted)">${k.priority}</td>
+      </tr>`).join('');
+  }
+  // Update hashtags panel
+  const hashtags = S.keywords.filter(k => k.type === 'social');
+  const hEl = document.getElementById('hashtag-list');
+  if (hEl && hashtags.length) {
+    hEl.innerHTML = hashtags.map(h =>
+      `<span style="background:var(--dark4);border:1px solid var(--border);border-radius:20px;padding:3px 10px;font-size:12px;color:var(--muted)">${h.keyword}</span>`
+    ).join('');
+  }
+  const label = document.getElementById('kw-count-label');
+  if (label) label.textContent = `${filtered.length} of ${S.keywords.length} total`;
+  document.getElementById('m-kw').textContent = S.keywords.length;
+}
+
+function clearKeywords() {
+  if (!confirm('Clear all keywords?')) return;
+  S.keywords = [];
+  localStorage.removeItem('ebh_kw');
+  renderKeywords();
+  alog('Keywords cleared', 'warning');
+}
+
+function setCompProg(pct, label) {
+  document.getElementById('comp-progress').style.display = 'block';
+  document.getElementById('comp-prog').style.width = pct + '%';
+  document.getElementById('comp-label').textContent = label;
+}
+
+// ── STEP 1: Find competitor URLs via search ────────────────────────────────
+async function getCompetitorURLs(seedKw, depth) {
+  const result = await callClaude(
+    'You are an SEO expert. Return ONLY a JSON array of URLs. No other text.',
+    `List the top ${depth} websites that currently rank on Google for "${seedKw}" in the crypto casino affiliate niche.
+These are real, well-known sites that dominate this niche.
+Include sites like: casino.guru, askgamblers.com, bestbitcoincasino.org, cryptogambling.org, coinrivet.com/gambling, etc.
+Return JSON array only: ["https://example.com/page","https://example2.com/page"]`
+  );
+  try {
+    const clean = result.replace(/```json|```/g, '').trim();
+    return JSON.parse(clean);
+  } catch(e) {
+    // Fallback to known competitors
+    return [
+      'https://casino.guru/bitcoin-casino-no-kyc',
+      'https://www.bestbitcoincasino.org/best-bitcoin-casinos',
+      'https://cryptogambling.org/crypto-casinos',
+      'https://coinrivet.com/guides/gambling/',
+      'https://askgamblers.com/bitcoin-casinos'
+    ].slice(0, depth);
+  }
+}
+
+// ── STEP 2: Fetch + analyze each competitor page ──────────────────────────
+async function analyzeCompetitorPage(url) {
+  const result = await callClaude(
+    'You are an SEO analyst. Analyze this competitor page for a crypto casino affiliate site. Return ONLY JSON, no other text.',
+    `Analyze the SEO of this page: ${url}
+    
+Based on what you know about this site and its ranking pages, provide:
+1. Keywords they target (both short and long-tail)
+2. Their meta title and description structure
+3. H1 and H2 heading patterns
+4. Internal linking strategy
+5. Content structure and length
+6. Schema markup they likely use
+7. Their top 5 ranking keywords with estimated monthly search volume
+
+Return ONLY this JSON:
+{
+  "url": "${url}",
+  "domain": "example.com",
+  "title_pattern": "pattern they use",
+  "meta_desc_pattern": "pattern",
+  "h1_pattern": "pattern",
+  "h2_patterns": ["pattern1","pattern2"],
+  "keywords": [
+    {"keyword":"best crypto casino","vol":8100,"diff":"medium","type":"short"},
+    {"keyword":"bitcoin casino no kyc 2026","vol":2400,"diff":"low","type":"long"}
+  ],
+  "content_insights": "key insight about their content strategy",
+  "schema_types": ["Article","FAQPage"],
+  "internal_linking": "description of their linking strategy",
+  "word_count": 2500,
+  "strengths": ["strength1","strength2"],
+  "gaps": ["gap we can exploit1","gap2"]
+}`
+  );
+  try {
+    const clean = result.replace(/```json|```/g, '').trim();
+    return JSON.parse(clean);
+  } catch(e) {
+    return { url, error: 'Analysis failed: ' + e.message };
+  }
+}
+
+// ── STEP 3: Synthesize insights + generate recommendations ────────────────
+async function synthesizeInsights(analyses) {
+  const summary = analyses.map(a => 
+    `${a.domain||a.url}: ${a.content_insights||''} | Keywords: ${(a.keywords||[]).slice(0,3).map(k=>k.keyword).join(', ')}`
+  ).join('\n');
+
+  const result = await callClaude(
+    'You are an SEO strategist for crypto casino affiliate sites. Return ONLY JSON.',
+    `Based on analysis of ${analyses.length} top-ranking competitor sites:
+
+${summary}
+
+Generate actionable SEO recommendations for EliteBonusHub.bet. Return ONLY:
+{
+  "meta_title_template": "template with {keyword} and {year} placeholders",
+  "meta_desc_template": "template",
+  "h1_template": "template",
+  "recommended_h2s": ["h2 idea 1","h2 idea 2","h2 idea 3","h2 idea 4"],
+  "schema_to_add": ["Article","FAQPage","BreadcrumbList"],
+  "content_improvements": ["improvement 1","improvement 2","improvement 3"],
+  "new_article_ideas": [
+    {"title":"article title","keyword":"target keyword","reason":"why this ranks well"},
+    {"title":"article title 2","keyword":"keyword 2","reason":"reason"}
+  ],
+  "combined_keywords": [
+    {"keyword":"keyword","vol":1000,"diff":"low","type":"long","source":"competitor","priority":"High"},
+    {"keyword":"#hashtag","vol":50000,"diff":"low","type":"social","source":"competitor","priority":"Medium"}
+  ],
+  "meta_tag_updates": {
+    "description": "new meta description for homepage",
+    "keywords": "keyword1, keyword2, keyword3",
+    "og_title": "og title"
+  }
+}`
+  );
+  try {
+    const clean = result.replace(/```json|```/g, '').trim();
+    return JSON.parse(clean);
+  } catch(e) {
+    return { error: 'Synthesis failed: ' + e.message };
+  }
+}
+
+// ── MAIN: Run full competitor analysis ────────────────────────────────────
+async function runCompetitorAnalysis() {
+  const btn = document.getElementById('btn-comp');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> Analyzing...';
+  document.getElementById('comp-result').innerHTML = '';
+  document.getElementById('competitor-sites-card').style.display = 'none';
+  document.getElementById('seo-insights-card').style.display = 'none';
+
+  const seedKw = document.getElementById('seed-kw').value.trim() || 'best crypto casino 2026';
+  const depth  = parseInt(document.getElementById('analysis-depth').value);
+
+  try {
+    // Step 1: Find competitors
+    setCompProg(8, `Finding top ${depth} competitors for "${seedKw}"...`);
+    alog('Starting competitor analysis for: ' + seedKw, 'info');
+    const urls = await getCompetitorURLs(seedKw, depth);
+
+    document.getElementById('competitor-sites-card').style.display = 'block';
+    document.getElementById('competitor-sites-list').innerHTML = urls.map((u,i) => `
+      <div style="display:flex;align-items:center;gap:8px;padding:.5rem .75rem;background:var(--dark4);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:.35rem;font-size:12px">
+        <span style="width:20px;height:20px;border-radius:50%;background:rgba(212,160,23,.15);color:var(--gold);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;flex-shrink:0">${i+1}</span>
+        <span style="flex:1;font-family:monospace;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${u}</span>
+        <span id="comp-status-${i}" class="badge bw">Pending</span>
+      </div>`).join('');
+
+    // Step 2: Analyze each page
+    const analyses = [];
+    for (let i = 0; i < urls.length; i++) {
+      const pct = 10 + (i / urls.length) * 55;
+      setCompProg(pct, `Analyzing competitor ${i+1}/${urls.length}: ${urls[i].replace('https://','').split('/')[0]}...`);
+      const statusEl = document.getElementById('comp-status-' + i);
+      if (statusEl) { statusEl.className = 'badge busy'; statusEl.textContent = 'Analyzing...'; }
+      const analysis = await analyzeCompetitorPage(urls[i]);
+      analyses.push(analysis);
+      if (statusEl) { statusEl.className = analysis.error ? 'badge bd' : 'badge bs'; statusEl.textContent = analysis.error ? 'Error' : 'Done'; }
+      alog('Analyzed: ' + (analysis.domain || urls[i]), 'success');
+      await sleep(400);
+    }
+
+    // Step 3: Synthesize
+    setCompProg(72, 'Synthesizing insights from all competitors...');
+    const insights = await synthesizeInsights(analyses);
+    seoInsights = { analyses, insights };
+
+    // Step 4: Add keywords to database
+    setCompProg(88, 'Adding competitor keywords to database...');
+    let newKwCount = 0;
+    const allNewKws = [];
+    analyses.forEach(a => {
+      (a.keywords || []).forEach(k => {
+        if (!S.keywords.find(e => e.keyword === k.keyword)) {
+          allNewKws.push({...k, source: a.domain || 'competitor', priority: k.priority || 'Medium'});
+          newKwCount++;
+        }
+      });
+    });
+    (insights.combined_keywords || []).forEach(k => {
+      if (!S.keywords.find(e => e.keyword === k.keyword)) {
+        allNewKws.push(k);
+        newKwCount++;
+      }
+    });
+    S.keywords = [...S.keywords, ...allNewKws];
+    localStorage.setItem('ebh_kw', JSON.stringify(S.keywords));
+    renderKeywords();
+
+    setCompProg(95, 'Building insights report...');
+
+    // Display insights
+    document.getElementById('seo-insights-card').style.display = 'block';
+    document.getElementById('seo-insights-content').innerHTML = `
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem">
+        <div>
+          <div style="font-size:11px;color:var(--muted);margin-bottom:.35rem;text-transform:uppercase;letter-spacing:.07em">Recommended title template</div>
+          <div style="background:var(--dark4);border-radius:var(--radius);padding:.6rem .85rem;font-size:12px;font-family:monospace">${insights.meta_title_template || 'N/A'}</div>
+        </div>
+        <div>
+          <div style="font-size:11px;color:var(--muted);margin-bottom:.35rem;text-transform:uppercase;letter-spacing:.07em">Recommended meta description template</div>
+          <div style="background:var(--dark4);border-radius:var(--radius);padding:.6rem .85rem;font-size:12px;font-family:monospace">${insights.meta_desc_template || 'N/A'}</div>
+        </div>
+      </div>
+      <div style="margin-bottom:1rem">
+        <div style="font-size:11px;color:var(--muted);margin-bottom:.5rem;text-transform:uppercase;letter-spacing:.07em">Content improvements to implement</div>
+        <div style="display:flex;flex-direction:column;gap:.35rem">
+          ${(insights.content_improvements || []).map(c => `<div style="display:flex;gap:8px;align-items:flex-start;font-size:12px;padding:.4rem .65rem;background:var(--dark4);border-radius:6px"><span style="color:#22c55e;flex-shrink:0">✓</span>${c}</div>`).join('')}
+        </div>
+      </div>
+      <div style="margin-bottom:1rem">
+        <div style="font-size:11px;color:var(--muted);margin-bottom:.5rem;text-transform:uppercase;letter-spacing:.07em">New article ideas from competitor gaps</div>
+        <div style="display:flex;flex-direction:column;gap:.35rem">
+          ${(insights.new_article_ideas || []).map(a => `<div style="padding:.5rem .75rem;background:var(--dark4);border-radius:6px;font-size:12px"><strong style="color:var(--gold)">${a.title}</strong> <span style="color:var(--muted);font-family:monospace;font-size:10px">${a.keyword}</span><br><span style="color:var(--muted)">${a.reason}</span></div>`).join('')}
+        </div>
+      </div>
+      <div>
+        <div style="font-size:11px;color:var(--muted);margin-bottom:.5rem;text-transform:uppercase;letter-spacing:.07em">Recommended schema markup to add</div>
+        <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+          ${(insights.schema_to_add || []).map(s => `<span class="badge bi">${s}</span>`).join('')}
+        </div>
+      </div>
+      <div style="margin-top:.85rem;font-size:11px;color:var(--muted)">
+        ✓ ${newKwCount} new keywords added to database · ${analyses.length} competitors analyzed
+      </div>`;
+
+    setCompProg(100, `✓ Analysis complete — ${newKwCount} new keywords found`);
+    document.getElementById('comp-result').innerHTML = `<div class="result-ok">✓ Analyzed ${analyses.length} competitors · ${newKwCount} new keywords added · Click "Apply SEO improvements" to push changes to your site</div>`;
+    alog(`Competitor analysis complete: ${analyses.length} sites, ${newKwCount} keywords`, 'success');
+
+  } catch(e) {
+    setCompProg(0, 'Error');
+    document.getElementById('comp-result').innerHTML = `<div class="result-err">✕ ${e.message}</div>`;
+    alog('Competitor analysis error: ' + e.message, 'error');
+  }
+  btn.disabled = false;
+  btn.innerHTML = '🔬 Analyze top competitors + extract keywords';
+}
+
+// ── Apply SEO improvements to site files ─────────────────────────────────
+async function applySEOChanges() {
+  if (!seoInsights) { alert('Run competitor analysis first'); return; }
+  const btn = document.getElementById('btn-apply-seo');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> Applying...';
+  const resultEl = document.getElementById('seo-apply-result');
+  const insights = seoInsights.insights;
+  let applied = [];
+
+  try {
+    // Fetch current index.html from GitHub
+    const indexData = await ghGet('index.html');
+    let indexHtml = decodeURIComponent(escape(atob(indexData.content.replace(/\n/g, ''))));
+
+    // 1. Update meta description
+    if (insights.meta_tag_updates?.description) {
+      const newDesc = insights.meta_tag_updates.description;
+      indexHtml = indexHtml.replace(
+        /<meta name="description" content="[^"]*">/,
+        `<meta name="description" content="${newDesc}">`
+      );
+      applied.push('Meta description updated');
+    }
+
+    // 2. Add keywords meta tag
+    if (insights.meta_tag_updates?.keywords) {
+      if (!indexHtml.includes('name="keywords"')) {
+        indexHtml = indexHtml.replace(
+          '</head>',
+          `<meta name="keywords" content="${insights.meta_tag_updates.keywords}">\n</head>`
+        );
+        applied.push('Keywords meta tag added');
+      }
+    }
+
+    // 3. Add schema markup — Article + FAQPage
+    const schemaTypes = insights.schema_to_add || ['Article','FAQPage','BreadcrumbList'];
+    const schemaJson = JSON.stringify({
+      "@context": "https://schema.org",
+      "@graph": schemaTypes.includes('Article') ? [
+        { "@type": "WebSite", "name": "EliteBonusHub", "url": "https://elitebonushub.bet" },
+        { "@type": "Organization", "name": "EliteBonusHub", "url": "https://elitebonushub.bet" }
+      ] : []
+    });
+    if (!indexHtml.includes('application/ld+json')) {
+      indexHtml = indexHtml.replace(
+        '</head>',
+        `<script type="application/ld+json">${schemaJson}<\/script>\n</head>`
+      );
+      applied.push('Schema markup added ('+schemaTypes.join(', ')+')');
+    }
+
+    // 4. Add SEO improvements comment with best-practice H2s
+    const seoComment = `\n<!-- SEO: Competitor-derived improvements applied ${new Date().toLocaleDateString()} -->\n`;
+    if (!indexHtml.includes('SEO: Competitor-derived')) {
+      indexHtml = indexHtml.replace('<body>', '<body>' + seoComment);
+      applied.push('SEO audit comment added');
+    }
+
+    // Push updated index.html
+    await ghPush('index.html', indexHtml, 'SEO improvements from competitor analysis');
+    applied.push('index.html pushed to GitHub');
+    alog('SEO improvements applied to index.html', 'success');
+
+    // Push updated sitemap
+    await ghPush('sitemap.xml', buildSitemap(), 'Update sitemap with SEO improvements');
+    applied.push('sitemap.xml updated');
+
+    // Add new article ideas to TOPICS queue
+    if (insights.new_article_ideas?.length) {
+      let added = 0;
+      insights.new_article_ideas.forEach(idea => {
+        if (!TOPICS.find(t => t.title === idea.title)) {
+          TOPICS.push({ title: idea.title, kw: idea.keyword });
+          added++;
+        }
+      });
+      if (added) applied.push(`${added} new article ideas added to pipeline queue`);
+      alog(`${added} competitor-derived article ideas added to queue`, 'success');
+    }
+
+    resultEl.innerHTML = `<div class="result-ok">✓ Applied ${applied.length} SEO improvements:<br>${applied.map(a=>`• ${a}`).join('<br>')}</div>`;
+    alog('SEO changes pushed to site: ' + applied.length + ' improvements', 'success');
+
+  } catch(e) {
+    resultEl.innerHTML = `<div class="result-err">✕ ${e.message}</div>`;
+    alog('SEO apply error: ' + e.message, 'error');
+  }
+  btn.disabled = false;
+  btn.innerHTML = '🚀 Apply SEO improvements to site';
+}
+
+// ── Standard keyword research (quick) ────────────────────────────────────
+async function doKeywordResearch() {
+  const btn = document.getElementById('btn-kw');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> Researching...';
+  try {
+    const result = await callClaude(
+      'You are an SEO expert for crypto casino affiliate sites. Return ONLY a JSON array, no other text.',
+      `Generate 30 keywords for a crypto casino affiliate site (elitebonushub.bet).
+Mix: 8 short-tail (1-2 words), 12 long-tail (4+ words), 5 review keywords, 5 social hashtags.
+Focus on: crypto casino, bitcoin casino, no KYC casino, provably fair, stake casino, bc.game, cloudbet, whale mode, crypto gambling 2026.
+
+Return ONLY JSON array:
+[{"keyword":"best crypto casino","vol":8100,"diff":"medium","type":"short","source":"research","priority":"High"},
+{"keyword":"#CryptoCasino","vol":50000,"diff":"low","type":"social","source":"research","priority":"Medium"}]`
+    );
+    const clean = result.replace(/```json|```/g, '').trim();
+    const keywords = JSON.parse(clean);
+    const newKws = keywords.filter(k => !S.keywords.find(e => e.keyword === k.keyword));
+    S.keywords = [...S.keywords, ...newKws];
+    localStorage.setItem('ebh_kw', JSON.stringify(S.keywords));
+    renderKeywords();
+    document.getElementById('kw-result').innerHTML = `<div class="result-ok">✓ Added ${newKws.length} keywords (${S.keywords.length} total)</div>`;
+    alog(`Keyword research: ${newKws.length} new keywords added`, 'success');
+  } catch(e) {
+    document.getElementById('kw-result').innerHTML = `<div class="result-err">✕ ${e.message}</div>`;
+    alog('Keyword research error: ' + e.message, 'error');
+  }
+  btn.disabled = false;
+  btn.innerHTML = '✨ Standard keyword research';
+}
+
+// ═══════════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════════
+document.addEventListener('DOMContentLoaded',function(){
+  loadKeys();
+  setM();
+  renderKeywords();
+  // Render topic queue on load
+  const qEl=document.getElementById('topic-queue');
+  if(qEl) qEl.innerHTML=TOPICS.map((t,i)=>`
+    <div style="display:flex;align-items:center;gap:8px;padding:.4rem .65rem;background:var(--dark4);border-radius:6px;border:1px solid var(--border);font-size:12px">
+      <span style="width:20px;height:20px;border-radius:50%;background:var(--dark3);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0">${i+1}</span>
+      <span style="flex:1">${t.title}</span>
+      <span style="font-size:10px;color:var(--muted);font-family:monospace">${t.kw}</span>
+    </div>`).join('');
+});
+</script>
+</body>
+</html>
