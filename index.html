@@ -39,12 +39,16 @@ async function _mcSub(email){
 }
 // Fire popup as soon as DOM is ready
 document.addEventListener('DOMContentLoaded',function(){
-  showPopup();
   // Close on backdrop click
   var el=document.getElementById('popup');
   if(el)el.addEventListener('click',function(e){if(e.target===this)closePopup();});
   // Close on Escape
   document.addEventListener('keydown',function(e){if(e.key==='Escape')closePopup();});
+  // Only show popup on first ever visit
+  if(!localStorage.getItem('ebh_visited')){
+    localStorage.setItem('ebh_visited','1');
+    setTimeout(showPopup, 1500);
+  }
 });
 </script>
 <meta charset="UTF-8">
