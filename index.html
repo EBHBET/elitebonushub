@@ -247,7 +247,7 @@ footer{background:var(--dark2);border-top:1px solid var(--border);padding:2.4rem
     <div class="wrap">
       <div class="sec-head">
         <span class="eyebrow">June 2026 rankings</span>
-        <h2>Top 3 Crypto Casino Bonuses</h2>
+        <h2>Top Crypto Casino Bonuses</h2>
         <p>Hand-picked offers with real value — verified terms, fast payouts and the lowest wagering we could find.</p>
       </div>
       <div class="cards">
@@ -298,6 +298,51 @@ footer{background:var(--dark2);border-top:1px solid var(--border);padding:2.4rem
           <span class="card-note"><a href="cloudbet-whale-mode.html" class="gold" style="text-decoration:underline">Read our Whale Mode guide →</a></span>
         </article>
 
+        <article class="card">
+          <div class="card-top">
+            <span class="card-name">Casino-X</span>
+            <span class="card-rank">★ 4.5 / 5</span>
+          </div>
+          <div class="card-bonus">Up to 400%<small>+ 200 free spins</small></div>
+          <ul class="feats">
+            <li>One of the biggest welcome bonuses</li>
+            <li>Slots, live casino, crash &amp; sports</li>
+            <li>Crypto and card payments</li>
+          </ul>
+          <a href="https://1449.gameshere.xyz/en/?partner=p1449p6184p5e71" rel="nofollow sponsored noopener" target="_blank" data-casino="Casino-X" class="card-cta">Claim Bonus at Casino-X →</a>
+          <span class="card-note"><a href="casino-x-review-2026.html" class="gold" style="text-decoration:underline">Read our Casino-X review →</a></span>
+        </article>
+
+        <article class="card">
+          <div class="card-top">
+            <span class="card-name">JoyCasino</span>
+            <span class="card-rank">★ 4.4 / 5</span>
+          </div>
+          <div class="card-bonus">Up to 200%<small>+ 200 free spins</small></div>
+          <ul class="feats">
+            <li>10+ years operating history</li>
+            <li>Casino, sports &amp; eSports</li>
+            <li>Strong VIP &amp; loyalty program</li>
+          </ul>
+          <a href="https://1449.call2me.pro/en/?partner=p1449p6186pe335" rel="nofollow sponsored noopener" target="_blank" data-casino="JoyCasino" class="card-cta">Claim Bonus at JoyCasino →</a>
+          <span class="card-note"><a href="joycasino-review-2026.html" class="gold" style="text-decoration:underline">Read our JoyCasino review →</a></span>
+        </article>
+
+        <article class="card">
+          <div class="card-top">
+            <span class="card-name">RamenBet</span>
+            <span class="card-rank">★ 4.3 / 5</span>
+          </div>
+          <div class="card-bonus">200% + 250 FS<small>Welcome offer · Crypto</small></div>
+          <ul class="feats">
+            <li>200% bonus + 250 free spins</li>
+            <li>Crypto-friendly deposits</li>
+            <li>Tournaments &amp; lotteries</li>
+          </ul>
+          <a href="https://1449.call2me.xyz/en/?partner=p1449p6185pf2ac" rel="nofollow sponsored noopener" target="_blank" data-casino="RamenBet" class="card-cta">Claim Bonus at RamenBet →</a>
+          <span class="card-note"><a href="ramenbet-review-2026.html" class="gold" style="text-decoration:underline">Read our RamenBet review →</a></span>
+        </article>
+
       </div>
     </div>
   </section>
@@ -318,6 +363,9 @@ footer{background:var(--dark2);border-top:1px solid var(--border);padding:2.4rem
             <tr><td><strong>Stake</strong></td><td>200% up to 1 BTC</td><td>No KYC</td><td>&lt; 60 sec</td><td>Overall #1</td></tr>
             <tr><td><strong>BC.Game</strong></td><td>180% up to 3 BTC</td><td>No KYC</td><td>Minutes</td><td>Altcoin players</td></tr>
             <tr><td><strong>Cloudbet</strong></td><td>$2,500 Welcome Package + 10% rakeback</td><td>Light</td><td>Minutes</td><td>High rollers</td></tr>
+            <tr><td><strong>Casino-X</strong></td><td>Up to 400% + 200 FS</td><td>Varies</td><td>Fast</td><td>Biggest bonus</td></tr>
+            <tr><td><strong>JoyCasino</strong></td><td>Up to 200% + 200 FS</td><td>Varies</td><td>Fast</td><td>VIP players</td></tr>
+            <tr><td><strong>RamenBet</strong></td><td>200% + 250 FS</td><td>Varies</td><td>Fast</td><td>Most free spins</td></tr>
           </tbody>
         </table>
       </div>
@@ -431,7 +479,7 @@ footer{background:var(--dark2);border-top:1px solid var(--border);padding:2.4rem
   document.addEventListener('click', function(e){
     var a = e.target.closest('a[rel*="sponsored"]');
     if(!a) return;
-    var host = (a.href.match(/stake\.com|bc\.game|cldbt\.cloud/) || ['affiliate'])[0];
+    var host = a.getAttribute('data-casino') || (a.href.match(/stake\.com|bc\.game|cldbt\.cloud/) || ['affiliate'])[0];
     gtag('event', 'affiliate_click', { casino_name: host, destination_url: a.href });
   });
 
