@@ -386,3 +386,26 @@ th.cb,td.cb{color:var(--gold-300)}
   text-align:center;font-size:.76rem;color:var(--muted);line-height:2}
 .site-footer a{color:var(--muted)}.site-footer a:hover{color:var(--gold-300)}
 @media(max-width:600px){.pros-cons{grid-template-columns:1fr}.article-footer{flex-direction:column}}
+
+/* ============================================================
+   Muted background heroes — contextual image sits BEHIND the
+   title under a strong dark scrim, optimized for readability.
+   Replaces the oversized standalone hero images.
+   ============================================================ */
+.hero.has-bg, .article-hero.has-bg{
+  min-height:300px; display:flex; align-items:center;
+  background:
+    linear-gradient(180deg, rgba(13,10,7,.82) 0%, rgba(13,10,7,.86) 55%, rgba(13,10,7,.96) 100%),
+    var(--hero-img) center/cover no-repeat;
+}
+.hero.has-bg > .wrap, .hero.has-bg > .hero-inner,
+.article-hero.has-bg > .article-hero-inner{position:relative;z-index:1;width:100%}
+.hero.has-bg h1, .article-hero.has-bg h1{filter:drop-shadow(0 3px 10px rgba(0,0,0,.75))}
+.hero.has-bg p, .hero.has-bg .meta, .article-hero.has-bg .article-meta{
+  text-shadow:0 1px 6px rgba(0,0,0,.7)}
+/* Guides hub hero as a contained muted-image card */
+.hub-hero.has-bg{
+  position:relative;overflow:hidden;border-radius:var(--radius-lg);border:1px solid var(--gold-900);
+  padding:2.6rem 1.4rem;max-width:980px;margin-inline:auto;
+  background:linear-gradient(180deg,rgba(13,10,7,.80),rgba(13,10,7,.92)),var(--hero-img) center/cover no-repeat}
+.hub-hero.has-bg h1{filter:drop-shadow(0 3px 10px rgba(0,0,0,.75))}
