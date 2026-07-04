@@ -420,7 +420,7 @@
   document.addEventListener('click', function(e){
     var a = e.target.closest('a[rel*="sponsored"]');
     if(!a) return;
-    var host = a.getAttribute('data-casino') || (a.href.match(/stake\.com|bc\.game|cldbt\.cloud/) || ['affiliate'])[0];
+    var host = a.getAttribute('data-casino') || (a.href.match(/stake\.com|bc\.game|cloudbet\.com|1xbet\.com/) || ['affiliate'])[0];
     gtag('event', 'affiliate_click', { casino_name: host, destination_url: a.href });
   });
   function showPopup(){ document.getElementById('overlay').classList.add('show'); gtag('event','email_popup_shown'); }
