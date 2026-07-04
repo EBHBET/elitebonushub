@@ -409,3 +409,12 @@ th.cb,td.cb{color:var(--gold-300)}
   padding:2.6rem 1.4rem;max-width:980px;margin-inline:auto;
   background:linear-gradient(180deg,rgba(13,10,7,.80),rgba(13,10,7,.92)),var(--hero-img) center/cover no-repeat}
 .hub-hero.has-bg h1{filter:drop-shadow(0 3px 10px rgba(0,0,0,.75))}
+
+/* ---- Language toggle (EN | FR | ES) ---- */
+.lang-toggle{display:inline-flex;gap:1px;border:1px solid var(--gold-900);border-radius:var(--rs);
+  overflow:hidden;align-self:center}
+.lang-toggle a{padding:.34rem .5rem;font-size:.7rem;font-weight:800;letter-spacing:.05em;
+  color:var(--text-2);background:transparent;text-transform:uppercase;line-height:1}
+.lang-toggle a:hover{color:var(--gold-300)}
+.lang-toggle a.active{background:var(--grad-gold-btn);color:var(--on-gold)}
+.site-nav .lang-toggle{margin-left:auto}
