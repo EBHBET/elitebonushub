@@ -1,0 +1,23 @@
+# EliteBonusHub
+
+> Independent crypto casino review and bonus comparison site. Covers Bitcoin/crypto casino reviews, welcome bonus breakdowns, no-KYC play, provably-fair gaming, and crypto deposit/withdrawal guides. EliteBonusHub earns affiliate commissions from operator sign-ups; this does not affect editorial rankings.
+
+EliteBonusHub tests and reviews individual crypto casinos (game selection, bonus terms, withdrawal speed, licensing) and publishes comparison guides across bonus types, payment methods (BTC/ETH/DOGE), and player profiles (high rollers, no-KYC players). All content is 18+ and includes responsible-gambling guidance.
+
+## Reviews
+- [BitStarz Review 2026](/bitstarz-review-2026.html): 100% up to 1 BTC + 180 free spins, multi-award-winning crypto casino operating since 2014
+- [Stake Casino Review 2026](/stake-casino-review-2026.html): 200% welcome bonus, no routine KYC, provably-fair originals
+- [Casino-X Review 2026](/casino-x-review-2026.html): Up to 400% bonus + 200 free spins
+- [BC.Game Review 2026](/bc-game-review-2026.html): 180% up to 3 BTC, 100+ cryptocurrencies
+- [Rollbit Review 2026](/rollbit-review-2026.html): Sportsbook, casino, and the RLB token
+
+## Guides
+- [Are Crypto Casinos Safe?](/are-crypto-casinos-safe.html): Licensing, fairness, and red flags
+- [Provably Fair Gambling Explained](/provably-fair-gambling-complete-guide.html): How to independently verify game results
+- [Top No-KYC Bitcoin Casinos](/top-bitcoin-casinos-with-no-kyc.html): Casinos that don't require routine identity verification
+- [How to Deposit Bitcoin at a Casino](/how-to-deposit-bitcoin-at-a-casino.html): Step-by-step funding guide
+
+## Policies
+- [Affiliate Disclosure](/disclosure.html)
+- [Responsible Gambling](/responsible-gambling.html)
+- [Privacy Policy](/privacy.html)
