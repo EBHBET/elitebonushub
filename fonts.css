@@ -1,3 +1,7 @@
+/* Not loaded externally -- inlined into every page's <head> as a <style>
+   block (avoids a second render-blocking request; @font-face rules
+   carry no layout risk when parsed synchronously). Kept here as the
+   canonical source for regenerating the inline copies. */
 @font-face {
   font-family: 'Cinzel';
   font-style: normal;
