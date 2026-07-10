@@ -670,12 +670,29 @@ header{position:sticky;top:0;z-index:40;background:rgba(13,10,7,.9);backdrop-fil
 <div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-labelledby="popup-title">
   <div class="popup">
     <button class="popup-close" onclick="closePopup()" aria-label="Fermer">×</button>
-    <h2 id="popup-title">Débloquez des<br>bonus VIP exclusifs</h2>
-    <p>Rejoignez plus de 24 000 joueurs qui reçoivent les meilleures offres de casino crypto en premier.</p>
-    <form id="emailForm" onsubmit="return submitEmail(event)">
-      <input type="email" id="emailInput" placeholder="votre@email.com" required aria-label="Adresse e-mail">
-      <button type="submit" class="btn btn-primary">Obtenir l'accès VIP — Gratuit</button>
-    </form>
+    <div id="popupForm">
+      <div style="font-size:2.2rem;margin-bottom:.2rem">🎰</div>
+      <h2 id="popup-title">50 Tours Gratuits.<br>Sans Dépôt Requis.</h2>
+      <p>Rejoignez plus de 24 000 joueurs sur notre liste VIP et nous vous enverrons le lien pour réclamer vos tours gratuits chez BitStarz dès maintenant — plus un accès prioritaire à chaque nouveau bonus sans dépôt que nous trouvons.</p>
+      <form id="emailForm" onsubmit="return submitEmail(event)">
+        <input type="email" id="emailInput" placeholder="votre@email.com" required aria-label="Adresse e-mail">
+        <button type="submit" class="btn btn-primary">Envoyer Mes Tours Gratuits →</button>
+      </form>
+      <div style="font-size:.75rem;color:var(--muted);margin-top:.6rem">Jamais de spam. Désabonnez-vous à tout moment. 18+ uniquement.</div>
+    </div>
+    <div id="popupSuccess" style="display:none">
+      <div style="font-size:2.2rem;margin-bottom:.2rem">🎉</div>
+      <h2>Vous êtes inscrit — bienvenue dans le club !</h2>
+      <p>Votre lien de 50 tours gratuits est en route vers votre boîte de réception.</p>
+      <p style="font-size:.85rem;color:var(--muted)">Vous ne le voyez pas d'ici une minute ou deux ? Vérifiez votre onglet <strong>Promotions</strong> ou votre dossier <strong>Spam</strong> — les premiers e-mails de nouveaux expéditeurs y atterrissent parfois.</p>
+      <button type="button" class="btn btn-outline" onclick="closePopup()" style="width:100%;margin-top:.5rem">Compris, merci !</button>
+    </div>
+    <div id="popupError" style="display:none">
+      <div style="font-size:2.2rem;margin-bottom:.2rem">⚠️</div>
+      <h2>Une erreur est survenue</h2>
+      <p>Nous n'avons pas pu enregistrer votre e-mail pour le moment. Veuillez réessayer dans un instant.</p>
+      <button type="button" class="btn btn-outline" onclick="retryPopup()" style="width:100%;margin-top:.5rem">Réessayer</button>
+    </div>
   </div>
 </div>
 
@@ -693,11 +710,31 @@ header{position:sticky;top:0;z-index:40;background:rgba(13,10,7,.9);backdrop-fil
   });
   function showPopup(){ document.getElementById('overlay').classList.add('show'); gtag('event','email_popup_shown'); }
   function closePopup(){ document.getElementById('overlay').classList.remove('show'); }
+  function retryPopup(){
+    document.getElementById('popupError').style.display = 'none';
+    document.getElementById('popupForm').style.display = 'block';
+  }
   function submitEmail(ev){
     ev.preventDefault();
-    gtag('event','email_signup',{ email_provided:true });
-    closePopup();
-    alert('Merci ! Consultez votre boîte de réception pour des bonus exclusifs.');
+    var email = document.getElementById('emailInput').value;
+    var btn = ev.target.querySelector('button[type="submit"]');
+    btn.disabled = true;
+    btn.textContent = 'Envoi…';
+    fetch('https://dartmail.carbarul-prod.workers.dev/api/subscribe', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-Site-Key': 'c589fa7a039a1a172a8a42785fa5d07a6e86fbd8ed66fee2' },
+      body: JSON.stringify({ email: email, locale: 'fr', source_page: 'fr_index_popup' })
+    }).then(function(resp){
+      if(!resp.ok) throw new Error('subscribe failed');
+      gtag('event','email_signup',{ email_provided:true });
+      document.getElementById('popupForm').style.display = 'none';
+      document.getElementById('popupSuccess').style.display = 'block';
+    }).catch(function(){
+      btn.disabled = false;
+      btn.textContent = 'Envoyer Mes Tours Gratuits →';
+      document.getElementById('popupForm').style.display = 'none';
+      document.getElementById('popupError').style.display = 'block';
+    });
     return false;
   }
   if(!localStorage.getItem('ebh_visited')){

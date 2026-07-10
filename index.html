@@ -675,12 +675,29 @@ header{position:sticky;top:0;z-index:40;background:rgba(13,10,7,.9);backdrop-fil
 <div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-labelledby="popup-title">
   <div class="popup">
     <button class="popup-close" onclick="closePopup()" aria-label="Close">×</button>
-    <h2 id="popup-title">Unlock Exclusive<br>VIP Bonuses</h2>
-    <p>Join 24,000+ players getting the best crypto casino offers first.</p>
-    <form id="emailForm" onsubmit="return submitEmail(event)">
-      <input type="email" id="emailInput" placeholder="your@email.com" required aria-label="Email address">
-      <button type="submit" class="btn btn-primary">Get VIP Access — Free</button>
-    </form>
+    <div id="popupForm">
+      <div style="font-size:2.2rem;margin-bottom:.2rem">🎰</div>
+      <h2 id="popup-title">50 Free Spins.<br>No Deposit Required.</h2>
+      <p>Join 24,000+ players on our VIP list and we'll email you the link to claim your free BitStarz spins right now — plus first access to every new no-deposit bonus we find.</p>
+      <form id="emailForm" onsubmit="return submitEmail(event)">
+        <input type="email" id="emailInput" placeholder="your@email.com" required aria-label="Email address">
+        <button type="submit" class="btn btn-primary">Send My Free Spins →</button>
+      </form>
+      <div style="font-size:.75rem;color:var(--muted);margin-top:.6rem">No spam, ever. Unsubscribe anytime. 18+ only.</div>
+    </div>
+    <div id="popupSuccess" style="display:none">
+      <div style="font-size:2.2rem;margin-bottom:.2rem">🎉</div>
+      <h2>You're in — welcome to the club!</h2>
+      <p>Your 50 free spins link is on its way to your inbox right now.</p>
+      <p style="font-size:.85rem;color:var(--muted)">Don't see it in a minute or two? Check your <strong>Promotions tab</strong> or <strong>Spam folder</strong> — first emails from new senders sometimes land there.</p>
+      <button type="button" class="btn btn-outline" onclick="closePopup()" style="width:100%;margin-top:.5rem">Got it, thanks!</button>
+    </div>
+    <div id="popupError" style="display:none">
+      <div style="font-size:2.2rem;margin-bottom:.2rem">⚠️</div>
+      <h2>Something went wrong</h2>
+      <p>We couldn't save your email just now. Please try again in a moment.</p>
+      <button type="button" class="btn btn-outline" onclick="retryPopup()" style="width:100%;margin-top:.5rem">Try Again</button>
+    </div>
   </div>
 </div>
 
@@ -703,13 +720,31 @@ header{position:sticky;top:0;z-index:40;background:rgba(13,10,7,.9);backdrop-fil
   // First-visit email popup
   function showPopup(){ document.getElementById('overlay').classList.add('show'); gtag('event','email_popup_shown'); }
   function closePopup(){ document.getElementById('overlay').classList.remove('show'); }
+  function retryPopup(){
+    document.getElementById('popupError').style.display = 'none';
+    document.getElementById('popupForm').style.display = 'block';
+  }
   function submitEmail(ev){
     ev.preventDefault();
     var email = document.getElementById('emailInput').value;
-    gtag('event','email_signup',{ email_provided:true });
-    // TODO: POST to Cloudflare Worker (mailchimp-worker.js) endpoint here
-    closePopup();
-    alert('Thanks! Check your inbox for exclusive bonuses.');
+    var btn = ev.target.querySelector('button[type="submit"]');
+    btn.disabled = true;
+    btn.textContent = 'Sending…';
+    fetch('https://dartmail.carbarul-prod.workers.dev/api/subscribe', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-Site-Key': 'c589fa7a039a1a172a8a42785fa5d07a6e86fbd8ed66fee2' },
+      body: JSON.stringify({ email: email, locale: 'en', source_page: 'index_popup' })
+    }).then(function(resp){
+      if(!resp.ok) throw new Error('subscribe failed');
+      gtag('event','email_signup',{ email_provided:true });
+      document.getElementById('popupForm').style.display = 'none';
+      document.getElementById('popupSuccess').style.display = 'block';
+    }).catch(function(){
+      btn.disabled = false;
+      btn.textContent = 'Send My Free Spins →';
+      document.getElementById('popupForm').style.display = 'none';
+      document.getElementById('popupError').style.display = 'block';
+    });
     return false;
   }
   if(!localStorage.getItem('ebh_visited')){
