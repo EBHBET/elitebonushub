@@ -1,0 +1,150 @@
+{
+  "seed_keyword": "no kyc casino (trust/legality/glossary/mobile spokes)",
+  "generated": "2026-07-13",
+  "site": "elitebonushub.bet",
+  "notes": "This plan does NOT create a new pillar page. It designs 4 new spoke posts across 3 clusters that all link into the site's existing pillar, top-bitcoin-casinos-with-no-kyc.html, closing specific content gaps flagged in the 2026-07-13 full SEO audit (findings/cluster.md): no legality/regulation guide, no glossary/FAQ for crypto-gambling terms, no mobile-app/no-KYC verification-process guide, and no adapted safety/trust content for the anonymous-gambling angle. Existing pillar requires an edit to add the 4 new outbound links (see internal link matrix) — this is the one piece of 'pillar' work this plan requires.",
+  "pillar": {
+    "title": "Top Bitcoin Casinos With No KYC",
+    "keyword": "no kyc casino",
+    "url": "/top-bitcoin-casinos-with-no-kyc.html",
+    "status": "existing_live_page",
+    "note": "Already live and ranking (per audit-data.json, this is the site's single largest GSC impression contributor — 81 impressions/pos 34 on a Korean-language no-KYC query). Not rewritten by this plan; only needs 4 new outbound links added."
+  },
+  "clusters": [
+    {
+      "id": "cluster-0",
+      "name": "Legality & Trust",
+      "color": "#4E79A7",
+      "serp_overlap_evidence": "'is no kyc casino legal' and 'no kyc casino verification process' share 5 of their top-10 organic results (gamblinginsider.com, cardplayer.com, betanews.com, kodedice.com, gamingamerica.com) — same-cluster tier (4-6 shared) per the SERP-overlap methodology. Both questions are answered as subsections of the same general no-KYC roundup articles, not by dedicated standalone competitors.",
+      "posts": [
+        {
+          "id": "cluster-0-post-0",
+          "title": "Is No-KYC Casino Gambling Legal? A Country-by-Country Guide",
+          "keyword": "is no kyc casino legal",
+          "secondary_keywords": ["no kyc gambling laws by country", "are no kyc casinos legal in usa", "no kyc casino regulation 2026"],
+          "intent": "Informational",
+          "template": "explainer",
+          "word_count_target": 1600,
+          "url": "/no-kyc-casino-legality-guide.html",
+          "status": "planned",
+          "outline": [
+            "Quick Verdict: legality depends on your jurisdiction and the casino's crypto-only payment model, not on KYC policy itself",
+            "Why crypto-only casinos can legally skip KYC (AML/KYC obligations are triggered by fiat currency, not decentralized tokens)",
+            "Curaçao and Anjouan licensing — what these licenses do and don't guarantee",
+            "US players: why using an offshore no-KYC site isn't a federal crime for individuals, but state-level rules vary",
+            "EU/UK players: stricter AML regimes and what to check before playing",
+            "Red flags: unlicensed operators vs. licensed-but-anonymous operators",
+            "FAQ (schema-marked): Is no-KYC gambling illegal? Can I get in trouble for playing at a no-KYC casino? Which countries ban no-KYC casinos outright?"
+          ],
+          "internal_links_out": ["pillar (top-bitcoin-casinos-with-no-kyc.html)", "cluster-0-post-1 (safety guide)", "cluster-1-post-0 (glossary, for AML/KYC term definitions)", "cluster-2-post-0 (mobile/app guide, callout: many no-KYC platforms are mobile/Telegram-only)"]
+        },
+        {
+          "id": "cluster-0-post-1",
+          "title": "Are No-KYC Casinos Safe? Verification Triggers, Risks & How to Vet a Site",
+          "keyword": "are no kyc casinos safe",
+          "secondary_keywords": ["no kyc casino verification process", "no kyc casino scams", "no kyc casino risks", "no kyc casino verification documents"],
+          "intent": "Informational",
+          "template": "explainer",
+          "word_count_target": 1500,
+          "url": "/no-kyc-casino-safety-verification-guide.html",
+          "status": "planned",
+          "outline": [
+            "Quick Verdict: 'no KYC' almost always means 'no KYC until a trigger' — full anonymity is rare and often a red flag",
+            "Full No-KYC vs. Partial-KYC casinos — the real distinction",
+            "The 4 common KYC triggers: large withdrawals (typically $5,000+), unusual betting patterns, multiple accounts, regulatory request",
+            "What verification actually involves when triggered (ID + proof of address, review timeline)",
+            "How to vet a no-KYC site before depositing: license check, public reserve/audit info, provably-fair verification, community reputation",
+            "Red flags that separate a legitimate no-KYC casino from a scam",
+            "FAQ (schema-marked): Can a no-KYC casino refuse to pay me? What happens if I refuse to verify? Are wallet-only casinos safer?"
+          ],
+          "internal_links_out": ["pillar", "cluster-0-post-0 (legality guide)", "cluster-1-post-0 (glossary, for AML/wallet-connect term definitions)"]
+        }
+      ]
+    },
+    {
+      "id": "cluster-1",
+      "name": "Glossary Reference Hub",
+      "color": "#59A14F",
+      "serp_overlap_evidence": "'crypto gambling terms glossary' shares 0 top-10 results with every other seed keyword in this plan — a fully distinct SERP owned by dedicated single-page glossary resources (aibc.world, coingambling.info, bitcoinchaser.com, webopedia.com), not general no-KYC roundup sites. Confirms this should be one comprehensive reference page, not folded into another cluster.",
+      "posts": [
+        {
+          "id": "cluster-1-post-0",
+          "title": "Crypto Casino Glossary: 50+ No-KYC Gambling Terms Explained",
+          "keyword": "crypto gambling glossary",
+          "secondary_keywords": ["what is kyc in gambling", "what is provably fair", "what is rakeback", "wagering requirements meaning", "what is a crash game", "what is aml crypto casino"],
+          "intent": "Informational",
+          "template": "glossary (A-Z reference / listicle format)",
+          "word_count_target": 2200,
+          "url": "/crypto-casino-glossary.html",
+          "status": "planned",
+          "outline": [
+            "Intro: why crypto casino jargon matters for a no-KYC/anonymous audience specifically",
+            "A-Z term list grouped by category: Blockchain & Payments (crypto wallet, blockchain confirmation, stablecoin), Compliance (KYC, AML, Curaçao license), Bonuses (wagering requirement, rakeback, cashback, no-deposit bonus), Games (provably fair, crash game, RTP, house edge), Trust & Safety (2FA, cold wallet, dispute resolution)",
+            "Each entry: 1-2 sentence definition + a contextual link to the EBH page where the term matters most (e.g. 'wagering requirement' links to the bonus-comparison pages)",
+            "FAQ (schema-marked): What does KYC stand for? What's the difference between AML and KYC? What is a provably-fair game?"
+          ],
+          "internal_links_out": ["pillar", "cluster-0-post-0 (legality guide)", "cluster-0-post-1 (safety guide)", "cluster-2-post-0 (mobile/app guide, for PWA/Telegram-casino term entries)"],
+          "note": "Deliberately sized above the standard 1200-1800 spoke range (2200 words) because this is a reference hub every other page can link out to for jargon — depth and term-count is the actual ranking factor for this SERP (competitors run 30-85+ terms)."
+        }
+      ]
+    },
+    {
+      "id": "cluster-2",
+      "name": "Mobile & App Access",
+      "color": "#F28E2B",
+      "serp_overlap_evidence": "'no kyc casino app mobile' shares 2-3 top-10 results with the general 'no kyc casino' seed (cardplayer.com, cryptonews.com, tokenist.com) — interlink tier (2-3 shared), distinct enough from both the Legality/Trust cluster and the Glossary cluster to stand as its own spoke rather than being merged into either.",
+      "posts": [
+        {
+          "id": "cluster-2-post-0",
+          "title": "No-KYC Casino Apps: Best Mobile & Telegram Options in 2026",
+          "keyword": "no kyc casino app",
+          "secondary_keywords": ["no kyc casino mobile", "no kyc casino telegram", "no kyc casino progressive web app"],
+          "intent": "Commercial",
+          "template": "listicle",
+          "word_count_target": 1400,
+          "url": "/no-kyc-casino-mobile-apps.html",
+          "status": "planned",
+          "outline": [
+            "Quick Verdict: most no-KYC casinos skip native apps entirely — app stores require developer-level KYC, so PWAs and mobile browsers are the norm",
+            "Why there's no 'no-KYC casino app' on the Play Store/App Store (policy explanation)",
+            "Progressive Web Apps (PWA): how to install a casino's PWA to your home screen, which of EBH's reviewed casinos offer one",
+            "Telegram-based access: how it works, which reviewed casinos support it",
+            "Mobile-browser-only access: why this is often the safer/more transparent option",
+            "The one native-app exception (BC.Game) and its multi-step install process",
+            "FAQ (schema-marked): Is there a real no-KYC casino app? Are casino PWAs safe? Can I gamble through Telegram?"
+          ],
+          "internal_links_out": ["pillar", "cluster-1-post-0 (glossary, for PWA/wallet-connect term definitions)", "cluster-0-post-1 (safety guide, cross-reference on vetting mobile-access methods)"]
+        }
+      ]
+    }
+  ],
+  "links": [
+    { "from": "cluster-0-post-0", "to": "pillar", "type": "mandatory", "anchor": "no-KYC casino rankings" },
+    { "from": "pillar", "to": "cluster-0-post-0", "type": "mandatory", "anchor": "is no-KYC casino gambling legal in your country" },
+    { "from": "cluster-0-post-1", "to": "pillar", "type": "mandatory", "anchor": "top-rated no-KYC casinos" },
+    { "from": "pillar", "to": "cluster-0-post-1", "type": "mandatory", "anchor": "are no-KYC casinos safe" },
+    { "from": "cluster-1-post-0", "to": "pillar", "type": "mandatory", "anchor": "no-KYC casino reviews" },
+    { "from": "pillar", "to": "cluster-1-post-0", "type": "mandatory", "anchor": "crypto casino glossary" },
+    { "from": "cluster-2-post-0", "to": "pillar", "type": "mandatory", "anchor": "best no-KYC casinos" },
+    { "from": "pillar", "to": "cluster-2-post-0", "type": "mandatory", "anchor": "no-KYC casino apps" },
+    { "from": "cluster-0-post-0", "to": "cluster-0-post-1", "type": "recommended", "anchor": "how to tell if a no-KYC casino is safe" },
+    { "from": "cluster-0-post-1", "to": "cluster-0-post-0", "type": "recommended", "anchor": "is this even legal where you live" },
+    { "from": "cluster-0-post-0", "to": "cluster-1-post-0", "type": "recommended", "anchor": "what AML and KYC actually mean" },
+    { "from": "cluster-0-post-1", "to": "cluster-1-post-0", "type": "recommended", "anchor": "glossary of verification terms" },
+    { "from": "cluster-2-post-0", "to": "cluster-1-post-0", "type": "recommended", "anchor": "what is a PWA" },
+    { "from": "cluster-1-post-0", "to": "cluster-0-post-0", "type": "optional", "anchor": "full legality breakdown" },
+    { "from": "cluster-1-post-0", "to": "cluster-2-post-0", "type": "optional", "anchor": "mobile access guide" },
+    { "from": "cluster-2-post-0", "to": "cluster-0-post-1", "type": "optional", "anchor": "vetting a mobile-first casino" },
+    { "from": "cluster-0-post-0", "to": "cluster-2-post-0", "type": "optional", "anchor": "mobile and Telegram-only platforms" }
+  ],
+  "cannibalization_check": {
+    "status": "pass",
+    "note": "None of the 4 new spokes target 'no kyc casino' itself or any variant close enough to overlap with the existing pillar (top-bitcoin-casinos-with-no-kyc.html) or the site's existing withdrawal-times/awards pages. Each spoke targets a keyword with 0-3 shared top-10 results against the pillar's own head-term SERP, confirmed via live WebSearch on 2026-07-13."
+  },
+  "meta": {
+    "totalPosts": 4,
+    "totalClusters": 3,
+    "totalLinks": 17,
+    "estimatedWords": 6700
+  }
+}
