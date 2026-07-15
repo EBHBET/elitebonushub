@@ -56,4 +56,31 @@ _Started 2026-07-06. Maintained by the `elitebonushub-content-seo-review` schedu
 
 Also added real editorial ratings (visible on-page `★` + `Review` schema) to 4 previously-unrated review pages to unblock 6 of these pairs: `stake-casino-review-2026.html` (4.8), `bc-game-review-2026.html` (4.6), `rollbit-review-2026.html` (4.3), `metaspins-review-2026.html` (4.2).
 
+## New-casino review cadence (Mon/Wed/Fri)
+
+**Added 2026-07-14.** New standing cadence: one new-casino review per Monday/Wednesday/Friday, each with EN + FR + ES versions, drafted in the order the brands appear in the "Campaign Links" tab of `.secrets/Master Affiliates.xlsx`. Only brands without an existing review page are included — BitStarz, Cloudbet, Gamdom and BC.Game already have reviews and are skipped. Slot dates start from the next Mon/Wed/Fri after 2026-07-14 (a Tuesday); the first slot (Wed 07-15) was drafted and published same-day per explicit instruction rather than waiting for the calendar date.
+
+| Slot date | Brand | Network | Status |
+|---|---|---|---|
+| 2026-07-15 (Wed) | 7BitCasino | 7Bit Partners | **Live** — published 2026-07-14, EN/FR/ES |
+| 2026-07-17 (Fri) | MiraxCasino | 7Bit Partners | Not started |
+| 2026-07-20 (Mon) | KatsuBet | 7Bit Partners | Not started |
+| 2026-07-22 (Wed) | Betfury | BetFury Affiliates | Not started |
+| 2026-07-24 (Fri) | Casinonic | RexAffiliates | Not started |
+| 2026-07-27 (Mon) | Winna Casino | Winna | Not started |
+| 2026-07-29 (Wed) | Rickycasino | RexAffiliates | Not started |
+| 2026-07-31 (Fri) | Queenspins | RexAffiliates | Not started |
+| 2026-08-03 (Mon) | Casinorex | RexAffiliates | Not started |
+| 2026-08-05 (Wed) | Dundeeslots | RexAffiliates | Not started |
+| 2026-08-07 (Fri) | Rockycasino | RexAffiliates | Not started — link was geo-blocked from this browsing location when verified 2026-07-14; re-check accessibility before drafting |
+| 2026-08-10 (Mon) | Anubiscasino | RexAffiliates | Not started |
+| 2026-08-12 (Wed) | Slotland | Slotland Affiliates | Not started |
+| 2026-08-14 (Fri) | Winaday | Slotland Affiliates | Not started |
+| 2026-08-17 (Mon) | Cryptoslots | Slotland Affiliates | Not started |
+| 2026-08-19 (Wed) | CryptoWins | Slotland Affiliates | Not started |
+| 2026-08-21 (Fri) | 1xBet | 1xPartners | Not started |
+| 2026-08-24 (Mon) | 1win | 1win Partners | Not started |
+
+**7BitCasino/KatsuBet/MiraxCasino geo note:** these three share one Market-Restrictions row (Slovakia, Israel, Lithuania, Greece, Spain, Ukraine, UK, France + French overseas territories, Netherlands/Curaçao/Dutch Caribbean). `7bitcasino-review-2026.html` (+ fr/es) is the first page wired to `/geo-divert.js`, diverting restricted-country visitors to the Cloudbet CTA instead (Cloudbet has no disclosed country blacklist). Apply the same `data-geo-restrict`/`data-geo-fallback-*` pattern to the KatsuBet and MiraxCasino reviews when their slots come up — same restricted-country list, same Cloudbet fallback.
+
 **Update (2026-07-10): all 10 pairs translated to fr/es.** Each of the 10 slugs above now also exists at `fr/{slug}.html` and `es/{slug}.html` — hand-translated (not machine-translated), reusing the exact nav/breadcrumb/footer/rg-note strings already established on other fr/es pages (e.g. `fr/top-bitcoin-casinos-with-no-kyc.html`) for consistency, with `og:locale`, `inLanguage` on Article/FAQPage schema, and `hreflang` alternates pointing across all 3 locales. Industry jargon (rakeback, cashback, VIP) kept in English per existing site convention; "sportsbook" → "paris sportifs" (fr) / "casa de apuestas" (es). All 20 fr/es files validated the same way as the EN batch (tag-balance, JSON-LD parse, internal-link resolution) — all pass. **Update (2026-07-10): wired into guides.html + sitemap.xml — this batch is now fully live.** Added a new "Comparisons" filter category to `guides.html`/`fr/guides.html`/`es/guides.html` (10 translated cards each, existing generic filter JS needed no changes) and appended all 30 URLs (10 slugs x en/fr/es) to `sitemap.xml` (105 → 135 entries). All verified: guides.html files pass tag-balance validation, all 30 links resolve, sitemap.xml is well-formed XML. Nothing left pending for this 10-pair batch except the 2 intentionally-skipped pairs noted above.
