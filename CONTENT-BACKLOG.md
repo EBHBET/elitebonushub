@@ -58,6 +58,8 @@ Also added real editorial ratings (visible on-page `★` + `Review` schema) to 4
 
 ## New-casino review cadence (Mon/Wed/Fri)
 
+**PAUSED 2026-07-14.** Halted same day it was added, after an honest SEO review: 28-day GSC data (2026-07-14 pull) shows 0 clicks / 317 impressions / avg position 41.4 — worse average position than the 2026-07-10 baseline (39.2) despite a large volume of new pages shipped in between. Diagnosis: the bottleneck is domain authority/backlinks, not content volume — more pages on a zero-authority domain doesn't fix a distribution problem. Publishing is paused until real backlink-building effort is underway; do not resume this cadence without an explicit decision to do so. See "Backlink efforts" section below for what's replacing this work in the meantime.
+
 **Added 2026-07-14.** New standing cadence: one new-casino review per Monday/Wednesday/Friday, each with EN + FR + ES versions, drafted in the order the brands appear in the "Campaign Links" tab of `.secrets/Master Affiliates.xlsx`. Only brands without an existing review page are included — BitStarz, Cloudbet, Gamdom and BC.Game already have reviews and are skipped. Slot dates start from the next Mon/Wed/Fri after 2026-07-14 (a Tuesday); the first slot (Wed 07-15) was drafted and published same-day per explicit instruction rather than waiting for the calendar date.
 
 | Slot date | Brand | Network | Status |
